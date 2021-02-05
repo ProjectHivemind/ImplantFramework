@@ -1,6 +1,7 @@
 site_name: Framework
-repo_url: https://github.com/squidfunk/mkdocs-material
-repo_name: squidfunk/mkdocs-material
+repo_url: https://github.com/projecthivemind
+repo_name: ProjectHivemind
+edit_uri: ""
 
 nav:
   - Home: index.md
@@ -12,3 +13,5 @@ theme:
     repo: fontawesome/brands/git-alt
   palette:
     scheme: preference
+  features:
+    - navigation.tabs
