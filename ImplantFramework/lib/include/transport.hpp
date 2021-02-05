@@ -1,5 +1,5 @@
 /** @file
- * @brief Class @ref hivemind_lib::Transport
+ * @brief Class hivemind_lib::Transport
  */
 #ifndef TRANSPORT_H
 #define TRANSPORT_H

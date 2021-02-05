@@ -1,5 +1,5 @@
 /** @file module.hpp
- * @brief Class @ref hivemind_lib::Module
+ * @brief Class hivemind_lib::Module
  */
 #ifndef MODULE_H
 #define MODULE_H
