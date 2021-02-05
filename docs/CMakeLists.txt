@@ -1,5 +1,5 @@
 find_package(Doxygen REQUIRED)
-find_package(Doxybook2 REQUIRED)
+find_package(doxybook2 REQUIRED)
 
 get_target_property(IMPLANTFRAMEWORK_PUBLIC_HEADER_DIR Hivemind_lib INTERFACE_INCLUDE_DIRECTORIES)
 file(GLOB_RECURSE IMPLANTFRAMEWORK_PUBLIC_HEADERS ${IMPLANTFRAMEWORK_PUBLIC_HEADER_DIR}/*.h)
@@ -39,6 +39,7 @@ add_custom_target(Doxybook2 ALL
         ${DOXYBOOK2_EXECUTABLE}
         --input ${DOXYGEN_OUTPUT_DIR}/xml/
         --output ${DOXYBOOK2_BUILD}
+        --templates ${DOXYBOOK2_SOURCE}
         -c ${DOXYBOOK2_SOURCE}/config.json
         WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
         COMMENT "Generating documentation with Doxybook2")

@@ -1,0 +1,33 @@
+
+{% for child0 in children %}{% if child0.kind == "dir" %}<details> <summary>{% endif %}
+<a href="{{child0.url}}">{{last(stripNamespace(child0.title))}}</a><br>
+{% if existsIn(child0, "children") %}</summary>
+{% for child1 in child0.children %}{% if child1.kind == "dir" %}<details> <summary>{% endif %}
+<a href="{{child1.url}}">{{last(stripNamespace(child1.title))}}</a><br>
+{% if existsIn(child1, "children") %}</summary>
+{% for child2 in child1.children %}{% if child2.kind == "dir" %}<details> <summary>{% endif %}
+<a href="{{child2.url}}">{{last(stripNamespace(child2.title))}}</a><br>
+{% if existsIn(child2, "children") %}</summary>
+{% for child3 in child2.children %}{% if child3.kind == "dir" %}<details> <summary>{% endif %}
+<a href="{{child3.url}}">{{last(stripNamespace(child3.title))}}</a><br>
+{% if existsIn(child3, "children") %}</summary>
+{% for child4 in child3.children %}{% if child4.kind == "dir" %}<details> <summary>{% endif %}
+<a href="{{child4.url}}">{{last(stripNamespace(child4.title))}}</a><br>
+{% if existsIn(child4, "children") %}</summary>
+{% for child5 in child4.children %}{% if child5.kind == "dir" %}<details> <summary>{% endif %}
+<a href="{{child5.url}}">{{last(stripNamespace(child5.title))}}</a><br>
+{% if existsIn(child5, "children") %}</summary>
+{% for child6 in child5.children %}{% if child6.kind == "dir" %}<details> <summary>{% endif %}
+<a href="{{child6.url}}">{{last(stripNamespace(child6.title))}}</a><br>
+{% if existsIn(child6, "children") %}</summary>
+{% for child7 in child6.children %}{% if child7.kind == "dir" %}<details> <summary>{% endif %}
+<a href="{{child7.url}}">{{last(stripNamespace(child7.title))}}</a><br>
+{% endfor %}
+{% if child7.kind == "dir" %}</details>{% endif %}{% endif %}
+{% if child6.kind == "dir" %}</details>{% endif %}{% endfor %}{% endif %}
+{% if child5.kind == "dir" %}</details>{% endif %}{% endfor %}{% endif %}
+{% if child4.kind == "dir" %}</details>{% endif %}{% endfor %}{% endif %}
+{% if child3.kind == "dir" %}</details>{% endif %}{% endfor %}{% endif %}
+{% if child2.kind == "dir" %}</details>{% endif %}{% endfor %}{% endif %}
+{% if child1.kind == "dir" %}</details>{% endif %}{% endfor %}{% endif %}
+{% if child0.kind == "dir" %}</details>{% endif %}{% endfor %}
