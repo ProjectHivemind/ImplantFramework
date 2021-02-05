@@ -1,0 +1,14 @@
+site_name: Hivemind
+repo_url: https://github.com/squidfunk/mkdocs-material
+repo_name: squidfunk/mkdocs-material
+
+nav:
+  - Home: index.md
+  - Classes: Classes/index.md
+  - Files: Files/index.md
+theme:
+  name: material
+  icon:
+    repo: fontawesome/brands/git-alt
+  palette:
+    scheme: preference

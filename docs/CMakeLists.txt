@@ -1,28 +1,44 @@
 find_package(Doxygen REQUIRED)
+find_package(Doxybook2 REQUIRED)
 
-# Find all the public headers
 get_target_property(IMPLANTFRAMEWORK_PUBLIC_HEADER_DIR Hivemind_lib INTERFACE_INCLUDE_DIRECTORIES)
 file(GLOB_RECURSE IMPLANTFRAMEWORK_PUBLIC_HEADERS ${IMPLANTFRAMEWORK_PUBLIC_HEADER_DIR}/*.h)
 
 set(DOXYGEN_INPUT_DIR ${PROJECT_SOURCE_DIR}/ImplantFramework)
-set(DOXYGEN_OUTPUT_DIR ${CMAKE_CURRENT_BINARY_DIR}/docs/doxygen)
+set(DOXYGEN_OUTPUT_DIR ${CMAKE_CURRENT_BINARY_DIR}/doxygen)
 set(DOXYGEN_INDEX_FILE ${DOXYGEN_OUTPUT_DIR}/xml/index.xml)
 set(DOXYFILE_IN ${CMAKE_CURRENT_SOURCE_DIR}/Doxyfile.in)
-set(DOXYFILE_OUT ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile)
-set(DOXYGEN_MCSS_BINARY ${PROJECT_SOURCE_DIR}/docs/m.css/documentation/doxygen.py)
-set(DOXYGEN_MCSS_FILE ${PROJECT_SOURCE_DIR}/docs/Doxyfile-mcss)
+set(DOXYFILE_OUT ${DOXYGEN_OUTPUT_DIR}/Doxyfile)
 
-#Replace variables inside @@ with the current values
 configure_file(${DOXYFILE_IN} ${DOXYFILE_OUT} @ONLY)
 
-file(MAKE_DIRECTORY ${DOXYGEN_OUTPUT_DIR}) #Doxygen won't create this for us
+file(MAKE_DIRECTORY ${DOXYGEN_OUTPUT_DIR})
 
 add_custom_command(OUTPUT ${DOXYGEN_INDEX_FILE}
                    DEPENDS ${IMPLANTFRAMEWORK_PUBLIC_HEADERS}
-                   COMMAND ${CMAKE_COMMAND} -E copy ${DOXYGEN_MCSS_FILE} Doxyfile-mcss
-                   COMMAND ${DOXYGEN_MCSS_BINARY} Doxyfile-mcss
+                   COMMAND ${DOXYGEN_EXECUTABLE} ${DOXYFILE_OUT}
                    MAIN_DEPENDENCY ${DOXYFILE_OUT} ${DOXYFILE_IN}
                    COMMENT "Generating docs"
                    VERBATIM)
 
 add_custom_target(Doxygen ALL DEPENDS ${DOXYGEN_INDEX_FILE})
+
+set(DOXYBOOK2_SOURCE ${CMAKE_CURRENT_SOURCE_DIR})
+set(DOCS_OUT ${CMAKE_CURRENT_BINARY_DIR}/out/)
+set(DOXYBOOK2_BUILD ${DOCS_OUT}/docs)
+set(MKDOCS_CONFIG ${CMAKE_CURRENT_SOURCE_DIR}/mkdocs.yml)
+set(DOCS_INDEX ${CMAKE_CURRENT_SOURCE_DIR}/index.md)
+
+file(MAKE_DIRECTORY ${DOXYBOOK2_BUILD})
+
+add_custom_target(Doxybook2 ALL
+        DEPENDS Doxygen
+        COMMAND ${CMAKE_COMMAND} -E copy ${MKDOCS_CONFIG} ${DOCS_OUT}/mkdocs.yml
+        COMMAND ${CMAKE_COMMAND} -E copy ${DOCS_INDEX} ${DOXYBOOK2_BUILD}/index.md
+        COMMAND
+        ${DOXYBOOK2_EXECUTABLE}
+        --input ${DOXYGEN_OUTPUT_DIR}/xml/
+        --output ${DOXYBOOK2_BUILD}
+        -c ${DOXYBOOK2_SOURCE}/config.json
+        WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+        COMMENT "Generating documentation with Doxybook2")
