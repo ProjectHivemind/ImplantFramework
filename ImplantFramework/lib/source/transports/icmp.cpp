@@ -1,5 +1,5 @@
 /** @file icmp.cpp
- * @brief Class hivemind_lib::Icmp_Transport
+ * @brief Contains implementation for the ICMP transport
  */
 #include "transport.hpp"
 

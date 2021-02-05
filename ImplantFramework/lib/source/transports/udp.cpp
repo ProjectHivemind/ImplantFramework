@@ -1,5 +1,5 @@
 /** @file udp.cpp
- * @brief Class hivemind_lib::Udp_Transport
+ * @brief Contains implementation for the UDP transport
  */
 #include "transport.hpp"
 

@@ -1,5 +1,5 @@
 /** @file
- * @brief Class hivemind_lib::Transport
+ * @brief Defines the abstract class for transports.
  */
 #ifndef TRANSPORT_H
 #define TRANSPORT_H

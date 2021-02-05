@@ -1,5 +1,5 @@
 /** @file module.hpp
- * @brief Class hivemind_lib::Module
+ * @brief Defines the abstract class for Modules and it's related structs.
  */
 #ifndef MODULE_H
 #define MODULE_H

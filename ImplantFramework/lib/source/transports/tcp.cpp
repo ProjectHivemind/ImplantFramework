@@ -1,5 +1,5 @@
 /** @file tcp.cpp
- * @brief Class hivemind_lib::Tcp_Transport
+ * @brief Contains implementation for the TCP transport
  */
 #include "transport.hpp"
 
