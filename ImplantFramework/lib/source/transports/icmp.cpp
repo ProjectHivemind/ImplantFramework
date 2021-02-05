@@ -1,5 +1,6 @@
 /** @file icmp.cpp
  * @brief Contains implementation for the ICMP transport
+ * @author Im_Adriano
  */
 #include "transport.hpp"
 

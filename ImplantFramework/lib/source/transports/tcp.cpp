@@ -1,5 +1,6 @@
 /** @file tcp.cpp
  * @brief Contains implementation for the TCP transport
+ * @author Im_Adriano
  */
 #include "transport.hpp"
 

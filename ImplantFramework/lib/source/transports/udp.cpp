@@ -1,5 +1,6 @@
 /** @file udp.cpp
  * @brief Contains implementation for the UDP transport
+ * @author Im_Adriano
  */
 #include "transport.hpp"
 

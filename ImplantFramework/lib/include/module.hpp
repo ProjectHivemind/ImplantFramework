@@ -1,5 +1,6 @@
 /** @file module.hpp
  * @brief Defines the abstract class for Modules and it's related structs.
+ * @author Im_Adriano
  */
 #ifndef MODULE_H
 #define MODULE_H

@@ -1,5 +1,6 @@
-/** @file
- * @brief Defines the abstract class for transports.
+/** @file transport.hpp
+ * @brief Defines the abstract class for transports
+ * @author Im_Adriano
  */
 #ifndef TRANSPORT_H
 #define TRANSPORT_H
