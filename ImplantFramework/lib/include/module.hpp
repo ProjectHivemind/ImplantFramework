@@ -68,6 +68,12 @@ class Module {
   */
   virtual ModuleInfo init() = 0;
 };
+
+enum Module_Enum{
+  All,
+  Ping,
+  Command_line
+};
 }
 
 #endif

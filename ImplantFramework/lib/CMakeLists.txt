@@ -1,4 +1,4 @@
-include_directories(${PROJECT_SOURCE_DIR}/ImplantFramework/include ${PROJECT_SOURCE_DIR}/ImplantFramework/lib/include)
+include_directories(${PROJECT_SOURCE_DIR}/ImplantFramework/include ${PROJECT_SOURCE_DIR}/ImplantFramework/lib/include ${PROJECT_SOURCE_DIR}/ImplantFramework/lib/platform)
 
 file(GLOB_RECURSE source_list "*.cpp" "*.hpp")
 

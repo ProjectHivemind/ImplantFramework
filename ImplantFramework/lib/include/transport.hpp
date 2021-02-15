@@ -36,6 +36,13 @@ class Transport {
   */
   virtual std::string Receive() = 0;
 };
+
+enum Transport_Enum{
+  None,
+  TCP,
+  UDP,
+  ICMP
+};
 }
 
 #endif // !TRANSPORT_H
