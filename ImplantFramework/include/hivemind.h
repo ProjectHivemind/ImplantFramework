@@ -11,7 +11,7 @@ int Init();
 //Add function to comms
 int AddFunction(void *);
 //Register bot
-int RegisterBot(CC_Info info);
+void RegisterBot(CC_Info info);
 //Start comms
 void BeginComms();
 void AddModule();

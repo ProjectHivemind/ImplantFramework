@@ -49,7 +49,7 @@ class logic_controller {
   /**
    * @brief Start the registration process
    */
-  void RegisterBot();
+  int RegisterBot();
   /**
    * @brief Start the communication with the C&C server, this is an infinite loop.
    */

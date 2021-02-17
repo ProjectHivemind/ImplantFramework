@@ -21,7 +21,7 @@
 // ^^^^^^^^^^^^^^^^^^^^^^
 
 #if DEBUGGING
-#define PRINT_STATEMENT(level, index, m) std::cout << std::left << std::setw(10) << __TIME__ << std::setw(7) << level \
+#define PRINT_STATEMENT(level, index, m, loc) loc << std::left << std::setw(10) << __TIME__ << std::setw(7) << level \
                                           << std::setw(30) << file.substr(index) + ":" + __func__ + ": "  \
                                           << m << std::endl;  \
 
@@ -39,16 +39,16 @@
     }                                                       \
     switch(level){                                          \
         case LEVEL_INFO:                                    \
-          PRINT_STATEMENT("INFO:", index, x)                \
+          PRINT_STATEMENT("INFO:", index, x, std::cout)     \
           break;                                            \
         case LEVEL_WARN:                                    \
-          PRINT_STATEMENT("WARN:", index, x)                \
+          PRINT_STATEMENT("WARN:", index, x, std::cerr)     \
           break;                                            \
         case LEVEL_ERROR:                                   \
-          PRINT_STATEMENT("ERROR:", index, x)               \
+          PRINT_STATEMENT("ERROR:", index, x, std::cerr)    \
           break;                                            \
         case LEVEL_DEBUG:                                   \
-          PRINT_STATEMENT("DEBUG:", index, x)               \
+          PRINT_STATEMENT("DEBUG:", index, x, std::cout)    \
           break;                                            \
     }                                                       \
   }                                                         \

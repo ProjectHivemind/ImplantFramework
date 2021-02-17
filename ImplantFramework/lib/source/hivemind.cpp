@@ -20,12 +20,11 @@ int AddFunction(void * func) {
   return 0;
 }
 
-int RegisterBot(CC_Info info) {
+void RegisterBot(CC_Info info) {
   DEBUG("Register Bot", LEVEL_INFO);
   DEBUG("Hostname->" << info.hostname, LEVEL_DEBUG);
   DEBUG("Port->" << info.port, LEVEL_DEBUG);
   controller.RegisterBot();
-  return 0;
 }
 
 void BeginComms() {
