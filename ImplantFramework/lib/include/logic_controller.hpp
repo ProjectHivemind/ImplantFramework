@@ -19,9 +19,21 @@
 
 namespace hivemind_lib {
 
+/**
+ * @brief Contains info on a thread.
+ */
 struct ThreadInfo{
+  /**
+   * @brief The handle to the thread.
+   */
   std::thread thread;
+  /**
+   * @brief When the thread was started.
+   */
   time_t time_start;
+  /**
+   * @brief How long in seconds until to wait before timing the thread out.
+   */
   long int timeout;
 };
 

@@ -69,6 +69,9 @@ class Module {
   virtual ModuleInfo init() = 0;
 };
 
+/**
+ * @brief Enum for available modules
+ */
 enum Module_Enum{
   All,
   Ping,

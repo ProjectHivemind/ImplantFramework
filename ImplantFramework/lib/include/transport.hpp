@@ -54,6 +54,9 @@ class Transport {
   std::string port;
 };
 
+/**
+ * @brief Enum for available transports
+ */
 enum Transport_Enum {
   None,
   TCP,

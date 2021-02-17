@@ -7,7 +7,9 @@
 #include "debugging.hpp"
 
 namespace hivemind_lib {
-
+/**
+ * @brief LINUX implementation of the ICMP transport.
+ */
 class LINUX_Icmp_Transport : public hivemind_lib::Transport {
  public:
   std::string SendAndReceive(std::string data) override;
@@ -16,7 +18,9 @@ class LINUX_Icmp_Transport : public hivemind_lib::Transport {
   LINUX_Icmp_Transport(std::string hostname, std::string port);
   ~LINUX_Icmp_Transport();
 };
-
+/**
+ * @brief LINUX implementation of the TCP transport.
+ */
 class LINUX_Tcp_Transport : public hivemind_lib::Transport {
  public:
   std::string SendAndReceive(std::string data) override;
@@ -27,7 +31,9 @@ class LINUX_Tcp_Transport : public hivemind_lib::Transport {
  private:
 
 };
-
+/**
+ * @brief LINUX implementation of the UDP transport.
+ */
 class LINUX_Udp_Transport : public hivemind_lib::Transport {
  public:
   std::string SendAndReceive(std::string data) override;
@@ -37,8 +43,17 @@ class LINUX_Udp_Transport : public hivemind_lib::Transport {
   ~LINUX_Udp_Transport();
 };
 
+/**
+ * @brief Typedef to help with cross platform
+ */
 typedef LINUX_Tcp_Transport Tcp_Transport;
+/**
+ * @brief Typedef to help with cross platform
+ */
 typedef LINUX_Icmp_Transport Icmp_Transport;
+/**
+ * @brief Typedef to help with cross platform
+ */
 typedef LINUX_Udp_Transport Udp_Transport;
 
 }
