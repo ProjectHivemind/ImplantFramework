@@ -2,6 +2,9 @@
  * @brief Contains implementation for the TCP transport
  * @author Im_Adriano
  */
+#include <utility>
+#include <iostream>
+
 #include "windows.hpp"
 
 /** @namespace hivemind_lib
@@ -18,5 +21,10 @@ void WINDOWS_Tcp_Transport::Send(std::string data) {
 
 std::string WINDOWS_Tcp_Transport::Receive() {
   return "";
+}
+
+WINDOWS_Tcp_Transport::WINDOWS_Tcp_Transport(std::string hostname, std::string port)
+    : Transport(std::move(hostname), std::move(port)) {
+
 }
 }

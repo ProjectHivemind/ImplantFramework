@@ -6,6 +6,7 @@
 #define TRANSPORT_H
 
 #include <string>
+#include <utility>
 
 /** @namespace hivemind_lib
  * @brief The Hivemind library
@@ -35,9 +36,25 @@ class Transport {
    * @return Data recieved from the server.
   */
   virtual std::string Receive() = 0;
+
+  Transport(std::string _hostname, std::string _port) {
+    this->hostname = std::move(_hostname);
+    this->port = std::move(_port);
+  }
+
+ private:
+  /**
+   * @brief Hostname to connect to for C&C
+   */
+  std::string hostname;
+
+  /**
+   * @brief Port, if needed, to connect to for C&C
+   */
+  std::string port;
 };
 
-enum Transport_Enum{
+enum Transport_Enum {
   None,
   TCP,
   UDP,

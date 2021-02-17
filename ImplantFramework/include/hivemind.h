@@ -1,4 +1,5 @@
-﻿//Interface to the hivemind_lib library eventually
+﻿#include <string>
+
 namespace hivemind_lib {
 
 struct CC_Info {
@@ -17,5 +18,6 @@ void AddModule();
 int UseTCP();
 int UseUDP();
 int UseICMP();
+int InitComms(std::string hostname, std::string port);
 
 }

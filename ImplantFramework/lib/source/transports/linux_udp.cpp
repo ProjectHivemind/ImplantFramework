@@ -3,6 +3,8 @@
  * @author Im_Adriano
  */
 
+#include <utility>
+
 #include "linux.hpp"
 
 /** @namespace hivemind_lib
@@ -19,5 +21,9 @@ void LINUX_Udp_Transport::Send(std::string data) {
 
 std::string LINUX_Udp_Transport::Receive() {
   return "";
+}
+LINUX_Udp_Transport::LINUX_Udp_Transport(std::string hostname, std::string port)
+    : Transport(std::move(hostname), std::move(port)) {
+
 }
 }
