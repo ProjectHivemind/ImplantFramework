@@ -2,8 +2,6 @@
  * @brief Contains implementation for the ICMP transport
  * @author Im_Adriano
  */
-#include <utility>
-
 #include "windows.hpp"
 
 /** @namespace hivemind_lib
@@ -23,6 +21,9 @@ std::string WINDOWS_Icmp_Transport::Receive() {
 }
 WINDOWS_Icmp_Transport::WINDOWS_Icmp_Transport(std::string hostname, std::string port)
   : Transport(std::move(hostname), std::move(port)) {
+
+}
+WINDOWS_Icmp_Transport::~WINDOWS_Icmp_Transport() {
 
 }
 }

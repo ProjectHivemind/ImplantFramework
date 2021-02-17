@@ -2,9 +2,6 @@
  * @brief Contains implementation for the ICMP transport
  * @author Im_Adriano
  */
-
-#include <utility>
-
 #include "linux.hpp"
 
 /** @namespace hivemind_lib
@@ -24,6 +21,9 @@ std::string LINUX_Icmp_Transport::Receive() {
 }
 LINUX_Icmp_Transport::LINUX_Icmp_Transport(std::string hostname, std::string port)
     : Transport(std::move(hostname), std::move(port)) {
+
+}
+LINUX_Icmp_Transport::~LINUX_Icmp_Transport() {
 
 }
 }

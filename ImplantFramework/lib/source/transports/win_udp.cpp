@@ -2,8 +2,6 @@
  * @brief Contains implementation for the UDP transport
  * @author Im_Adriano
  */
-#include <utility>
-
 #include "windows.hpp"
 
 /** @namespace hivemind_lib
@@ -23,6 +21,9 @@ std::string WINDOWS_Udp_Transport::Receive() {
 }
 WINDOWS_Udp_Transport::WINDOWS_Udp_Transport(std::string hostname, std::string port)
     : Transport(std::move(hostname), std::move(port)) {
+
+}
+WINDOWS_Udp_Transport::~WINDOWS_Udp_Transport() {
 
 }
 }

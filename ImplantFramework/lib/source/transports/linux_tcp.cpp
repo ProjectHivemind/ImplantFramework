@@ -2,8 +2,6 @@
  * @brief Contains implementation for the TCP transport
  * @author Im_Adriano
  */
-#include <utility>
-
 #include "linux.hpp"
 
 /** @namespace hivemind_lib
@@ -23,6 +21,9 @@ std::string LINUX_Tcp_Transport::Receive() {
 }
 LINUX_Tcp_Transport::LINUX_Tcp_Transport(std::string hostname, std::string port)
     : Transport(std::move(hostname), std::move(port)) {
+
+}
+LINUX_Tcp_Transport::~LINUX_Tcp_Transport() {
 
 }
 }

