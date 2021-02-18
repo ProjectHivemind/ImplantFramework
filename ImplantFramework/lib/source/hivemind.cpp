@@ -55,5 +55,10 @@ int InitComms(std::string hostname, std::string port){
   controller.InitComms(std::move(hostname), std::move(port));
   return 0;
 }
+
+void AddModule(ModuleEnum mod) {
+  DEBUG("Add Module: " << mod, LEVEL_INFO);
+  controller.AddModule(mod);
+}
 }
 

@@ -8,6 +8,7 @@
 #include <map>
 #include <string>
 #include <vector>
+#include "json.hpp"
 
 /** @namespace hivemind_lib
  * @brief The Hivemind library
@@ -69,14 +70,10 @@ class Module {
   virtual ModuleInfo init() = 0;
 };
 
-/**
- * @brief Enum for available modules
- */
-enum Module_Enum{
-  All,
-  Ping,
-  Command_line
-};
+NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(ModuleFuncParamInfo, paramName, paramType);
+NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(ModuleFuncInfo, moduleFuncName, moduleFuncDesc, paramNum, paramInfos);
+NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(ModuleInfo, moduleName, moduleDesc, moduleFuncs);
+
 }
 
 #endif

@@ -3,6 +3,9 @@
 #include "transport.hpp"
 #include "module.hpp"
 #include "debugging.hpp"
+#include "comms.hpp"
+#include "json.hpp"
+#include "hivemind.h"
 
 #include <map>
 #include <string>
@@ -22,7 +25,7 @@ namespace hivemind_lib {
 /**
  * @brief Contains info on a thread.
  */
-struct ThreadInfo{
+struct ThreadInfo {
   /**
    * @brief The handle to the thread.
    */
@@ -45,7 +48,7 @@ class logic_controller {
   /**
    * @brief The method to use for transport
    */
-  Transport_Enum transport_method;
+  Transport_Enum transportMethod;
   /**
    * @brief Modules this bot can run and where they are located
    */
@@ -54,7 +57,8 @@ class logic_controller {
    * @brief The transport, used for C&C communications
    */
   std::unique_ptr<Transport> transport;
-  std::vector<ThreadInfo> thread_infos;
+  ImplantInfo implantInfo;
+  std::vector<ThreadInfo> threadInfos;
 
  public:
   /**
@@ -77,9 +81,10 @@ class logic_controller {
   void BeginComms();
 
   /**
-   * @brief Add a module to the logic controller, not sure if needed
+   * @brief Add a module to the logic controller.
+   * @param mod Module to add
    */
-  void AddModule();
+  void AddModule(ModuleEnum mod);
 
   /**
    * @brief Set the transportation method for C&C traffic

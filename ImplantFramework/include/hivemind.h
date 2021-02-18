@@ -1,4 +1,6 @@
-﻿#include <string>
+﻿#ifndef HIVEMIND_H
+#define HIVEMIND_H
+#include <string>
 
 namespace hivemind_lib {
 
@@ -11,12 +13,22 @@ struct CC_Info {
 };
 
 /**
+ * @brief Enum for available modules
+ */
+enum ModuleEnum{
+  All,
+  Ping,
+  CommandLine
+};
+
+/**
  * @brief Initialize the library.
  * @return Status.
  */
 int Init();
 /**
  * @brief Add function not found in a module to the library.
+ * Stretch Goal TODO
  * @return Status.
  */
 int AddFunction(void *);
@@ -35,7 +47,7 @@ void BeginComms();
 /**
  * @brief Unknown.
  */
-void AddModule();
+void AddModule(ModuleEnum mod);
 /**
  * @brief Use the TCP transport.
  * @return Status.
@@ -60,3 +72,4 @@ int UseICMP();
 int InitComms(std::string hostname, std::string port);
 
 }
+#endif
