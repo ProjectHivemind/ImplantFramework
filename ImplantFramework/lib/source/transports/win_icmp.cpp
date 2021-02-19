@@ -3,6 +3,7 @@
  * @author Im_Adriano
  */
 #include "windows.hpp"
+//TODO Implement this.
 
 /** @namespace hivemind_lib
  * @brief The Hivemind library
@@ -20,7 +21,7 @@ std::string WINDOWS_Icmp_Transport::Receive() {
   return "";
 }
 WINDOWS_Icmp_Transport::WINDOWS_Icmp_Transport(std::string hostname, std::string port)
-  : Transport(std::move(hostname), std::move(port)) {
+    : Transport(std::move(hostname), std::move(port)) {
 
 }
 WINDOWS_Icmp_Transport::~WINDOWS_Icmp_Transport() {

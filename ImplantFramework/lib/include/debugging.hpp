@@ -22,14 +22,14 @@
 
 #if DEBUGGING
 #define PRINT_STATEMENT(level, index, m, loc) loc << std::left << std::setw(10) << __TIME__ << std::setw(7) << level \
-                                          << std::setw(30) << file.substr(index) + ":" + __func__ + ": "  \
+                                          << std::setw(40) << file.substr(index) + ":" + __func__ + ": "  \
                                           << m << std::endl;  \
 
 /**
  * @brief Debug statement, first arg is what to print, and second is the level this statement is at.
  */
 #define DEBUG(x, level) do {                                \
-  if(level & (DEBUG_MASK)) {                                \
+  if((level) & (DEBUG_MASK)) {                                \
     std::string file = __FILE__;                            \
     size_t index;                                           \
     for (index = file.size(); index > 0; index--)           \
@@ -42,10 +42,10 @@
           PRINT_STATEMENT("INFO:", index, x, std::cout)     \
           break;                                            \
         case LEVEL_WARN:                                    \
-          PRINT_STATEMENT("WARN:", index, x, std::cerr)     \
+          PRINT_STATEMENT("WARN:", index, x, std::cout)     \
           break;                                            \
         case LEVEL_ERROR:                                   \
-          PRINT_STATEMENT("ERROR:", index, x, std::cerr)    \
+          PRINT_STATEMENT("ERROR:", index, x, std::cout)    \
           break;                                            \
         case LEVEL_DEBUG:                                   \
           PRINT_STATEMENT("DEBUG:", index, x, std::cout)    \

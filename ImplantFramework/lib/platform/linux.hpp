@@ -5,6 +5,7 @@
 
 #include "transport.hpp"
 #include "debugging.hpp"
+#include "module.hpp"
 
 namespace hivemind_lib {
 /**
@@ -44,6 +45,16 @@ class LINUX_Udp_Transport : public hivemind_lib::Transport {
 };
 
 /**
+ * @brief LINUX Implementation of the PING module.
+ */
+class LINUX_Ping_Module : public Module {
+ public:
+  ModuleInfo init() override;
+  std::string ping(std::string host);
+  LINUX_Ping_Module();
+};
+
+/**
  * @brief Typedef to help with cross platform
  */
 typedef LINUX_Tcp_Transport Tcp_Transport;
@@ -55,6 +66,10 @@ typedef LINUX_Icmp_Transport Icmp_Transport;
  * @brief Typedef to help with cross platform
  */
 typedef LINUX_Udp_Transport Udp_Transport;
+/**
+ * @brief Typedef to help with cross platform
+ */
+typedef LINUX_Ping_Module Ping_Module;
 
 }
 #endif

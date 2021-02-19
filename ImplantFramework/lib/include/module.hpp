@@ -8,22 +8,16 @@
 #include <map>
 #include <string>
 #include <vector>
+#include <any>
+#include <typeindex>
+#include <typeinfo>
+
 #include "json.hpp"
 
 /** @namespace hivemind_lib
  * @brief The Hivemind library
  */
 namespace hivemind_lib {
-/**
- * @brief Struct used to describe parameters needed for a given function in a module.
-*/
-struct ModuleFuncParamInfo {
-  /// \brief The name of the parameter.
-  std::string paramName;
-  /// \brief The type of the parameter.
-  std::string paramType;
-};
-
 /**
  * @brief Struct used to describe a callable function in this module.
 */
@@ -33,9 +27,10 @@ struct ModuleFuncInfo {
   /// \brief Description of the function.
   std::string moduleFuncDesc;
   /// \brief Number of parameters the function takes.
-  int paramNum;
+  int paramNum = 0;
   /// \brief List of structs containing info about the function parameters.
-  std::vector<ModuleFuncParamInfo> paramInfos;
+  std::vector<std::string> paramNames;
+  std::vector<std::string> paramTypes;
 };
 
 /**
@@ -56,7 +51,7 @@ struct ModuleInfo {
 class Module {
  public:
   /// \brief A map of function name to it's memory location. Used to help with abstraction.
-  std::map<std::string, void *> funcMap;
+  std::map<std::string, std::function<std::string(std::string)>> funcMap;
   /// \brief A map of function names to it's respective timeout time.
   std::map<std::string, int> timeoutMap;
   /// \brief Struct containing info about the current module.
@@ -70,8 +65,7 @@ class Module {
   virtual ModuleInfo init() = 0;
 };
 
-NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(ModuleFuncParamInfo, paramName, paramType);
-NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(ModuleFuncInfo, moduleFuncName, moduleFuncDesc, paramNum, paramInfos);
+NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(ModuleFuncInfo, moduleFuncName, moduleFuncDesc, paramNum, paramNames, paramTypes);
 NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(ModuleInfo, moduleName, moduleDesc, moduleFuncs);
 
 }

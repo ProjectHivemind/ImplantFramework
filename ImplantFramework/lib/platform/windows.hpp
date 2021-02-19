@@ -3,14 +3,15 @@
 
 #include <utility>
 #include <iostream>
-#define _WINSOCKAPI_
-#include <windows.h>
 #include <winsock2.h>
+#include <windows.h>
 #include <ws2tcpip.h>
 #include <cstdlib>
 #include <cstdio>
+#include <map>
 #include "transport.hpp"
 #include "debugging.hpp"
+#include "module.hpp"
 
 #define DEFAULT_BUFLEN 512
 
@@ -18,7 +19,7 @@ namespace hivemind_lib {
 /**
  * @brief WINDOWS implementation of the ICMP transport.
  */
-class WINDOWS_Icmp_Transport : public hivemind_lib::Transport {
+class WINDOWS_Icmp_Transport : public Transport {
  public:
   std::string SendAndReceive(std::string data) override;
   void Send(std::string data) override;
@@ -29,7 +30,7 @@ class WINDOWS_Icmp_Transport : public hivemind_lib::Transport {
 /**
  * @brief WINDOWS implementation of the TCP transport.
  */
-class WINDOWS_Tcp_Transport : public hivemind_lib::Transport {
+class WINDOWS_Tcp_Transport : public Transport {
  public:
   std::string SendAndReceive(std::string data) override;
   void Send(std::string data) override;
@@ -53,7 +54,7 @@ class WINDOWS_Tcp_Transport : public hivemind_lib::Transport {
 /**
  * @brief WINDOWS implementation of the UDP transport.
  */
-class WINDOWS_Udp_Transport : public hivemind_lib::Transport {
+class WINDOWS_Udp_Transport : public Transport {
  public:
   std::string SendAndReceive(std::string data) override;
   void Send(std::string data) override;
@@ -62,9 +63,32 @@ class WINDOWS_Udp_Transport : public hivemind_lib::Transport {
   ~WINDOWS_Udp_Transport();
 };
 
+/**
+ * @brief WINDOWS Implementation of the PING module.
+ */
+class WINDOWS_Ping_Module : public Module {
+ public:
+  ModuleInfo init() override;
+  std::string ping(std::string host);
+  WINDOWS_Ping_Module();
+};
+
+/**
+ * @brief Typedef to help with cross platform
+ */
 typedef WINDOWS_Tcp_Transport Tcp_Transport;
+/**
+ * @brief Typedef to help with cross platform
+ */
 typedef WINDOWS_Icmp_Transport Icmp_Transport;
+/**
+ * @brief Typedef to help with cross platform
+ */
 typedef WINDOWS_Udp_Transport Udp_Transport;
+/**
+ * @brief Typedef to help with cross platform
+ */
+typedef WINDOWS_Ping_Module Ping_Module;
 
 }
 #endif

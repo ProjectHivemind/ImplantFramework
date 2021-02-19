@@ -61,7 +61,7 @@ struct Packet {
 };
 
 struct Error {
-  int actionId;
+  std::string actionId;
   ErrorNum errorNum;
 };
 
@@ -76,7 +76,7 @@ struct RegistrationRequest {
   std::vector<ModuleInfo> supportedModules;
 };
 
-struct RegistrationResponse{
+struct RegistrationResponse {
   std::string UUID;
 };
 
@@ -84,7 +84,15 @@ NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(ImplantInfo, UUID, primaryIP);
 NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(ActionResponse, actionId, response);
 NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(Action, actionId, module, moduleFunc, arguments);
 NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(Error, actionId, errorNum);
-NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(RegistrationRequest, IP, implantName, implantVersion, hostname, MAC, otherIPs, OS, supportedModules);
+NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(RegistrationRequest,
+                                   IP,
+                                   implantName,
+                                   implantVersion,
+                                   hostname,
+                                   MAC,
+                                   otherIPs,
+                                   OS,
+                                   supportedModules);
 NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(Packet, fingerprint, implantInfo, packetType, numLeft, data);
 NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(RegistrationResponse, UUID);
 

@@ -34,6 +34,7 @@ class Transport {
   /**
    * @brief Receive data from the server.
    * @return Data recieved from the server.
+   * TODO Talk about removing.
   */
   virtual std::string Receive() = 0;
 
