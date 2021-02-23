@@ -55,19 +55,19 @@ class LinuxPingModule : public Module {
 };
 
 /**
- * @brief Typedef to help with cross platform
+ * @brief Typedef to help with cross platform.
  */
 typedef LinuxTcpTransport TcpTransport;
 /**
- * @brief Typedef to help with cross platform
+ * @brief Typedef to help with cross platform.
  */
 typedef LinuxIcmpTransport IcmpTransport;
 /**
- * @brief Typedef to help with cross platform
+ * @brief Typedef to help with cross platform.
  */
 typedef LinuxUdpTransport UdpTransport;
 /**
- * @brief Typedef to help with cross platform
+ * @brief Typedef to help with cross platform.
  */
 typedef LinuxPingModule PingModule;
 

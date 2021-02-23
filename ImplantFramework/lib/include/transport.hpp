@@ -38,6 +38,11 @@ class Transport {
   */
   virtual std::string Receive() = 0;
 
+  /**
+   * @brief Constructor.
+   * @param hostname Hostname to connect to.
+   * @param port Port to connect to.
+   */
   Transport(std::string hostname, std::string port) {
     this->hostname_ = std::move(hostname);
     this->port_ = std::move(port);
@@ -45,18 +50,18 @@ class Transport {
 
  private:
   /**
-   * @brief Hostname to connect to for C&C
+   * @brief Hostname to connect to for C&C.
    */
   std::string hostname_;
 
   /**
-   * @brief Port, if needed, to connect to for C&C
+   * @brief Port, if needed, to connect to for C&C.
    */
   std::string port_;
 };
 
 /**
- * @brief Enum for available transports
+ * @brief Enum for available transports.
  */
 enum TransportEnum {
   NONE,

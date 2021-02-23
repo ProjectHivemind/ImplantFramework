@@ -11,11 +11,11 @@
 
 // ONLY EDIT THESE VALUES
 /**
- * @brief Mask for what level of debug statements to print
+ * @brief Mask for what level of debug statements to print.
  */
 #define DEBUG_MASK LEVEL_ALL
 /**
- * @brief Disable or enable debugging all together
+ * @brief Disable or enable debugging all together.
  */
 #define DEBUGGING true
 // ^^^^^^^^^^^^^^^^^^^^^^

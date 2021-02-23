@@ -29,8 +29,9 @@ struct ModuleFuncInfo {
   std::string module_func_desc;
   /// \brief Number of parameters the function takes.
   int param_num = 0;
-  /// \brief List of structs containing info about the function parameters.
+  /// \brief List of strings containing names for the function parameters.
   std::vector<std::string> param_names;
+  /// \brief List of strings containing types for the function parameters.
   std::vector<std::string> param_types;
 };
 
@@ -66,12 +67,18 @@ class Module {
   virtual ModuleInfo Init() = 0;
 };
 
+/**
+ * @brief Generate json parsing functions for struct.
+ */
 NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(ModuleFuncInfo,
                                    module_func_name,
                                    module_func_desc,
                                    param_num,
                                    param_names,
                                    param_types);
+/**
+ * @brief Generate json parsing functions for struct.
+ */
 NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(ModuleInfo, module_name, module_desc, module_funcs);
 
 }

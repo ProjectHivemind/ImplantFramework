@@ -1,5 +1,5 @@
-#ifndef WINDOWS_H
-#define WINDOWS_H
+#ifndef HIVEMIND_IMPLANTFRAMEWORK_LIB_PLATFORM_WINDOWS_HPP_
+#define HIVEMIND_IMPLANTFRAMEWORK_LIB_PLATFORM_WINDOWS_HPP_
 
 #include <utility>
 #include <iostream>
@@ -64,24 +64,29 @@ class WindowsUdpTransport : public Transport {
 class WindowsPingModule : public Module {
  public:
   ModuleInfo Init() override;
+  /**
+   * @brief Module function to ping a host.
+   * @param host The host to ping.
+   * @return Result from ping.
+   */
   std::string Ping(std::string host);
   WindowsPingModule();
 };
 
 /**
- * @brief Typedef to help with cross platform
+ * @brief Typedef to help with cross platform.
  */
 typedef WindowsTcpTransport TcpTransport;
 /**
- * @brief Typedef to help with cross platform
+ * @brief Typedef to help with cross platform.
  */
 typedef WindowsIcmpTransport IcmpTransport;
 /**
- * @brief Typedef to help with cross platform
+ * @brief Typedef to help with cross platform.
  */
 typedef WindowsUdpTransport UdpTransport;
 /**
- * @brief Typedef to help with cross platform
+ * @brief Typedef to help with cross platform.
  */
 typedef WindowsPingModule PingModule;
 
