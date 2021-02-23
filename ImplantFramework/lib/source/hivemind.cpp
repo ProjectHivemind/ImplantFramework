@@ -1,62 +1,80 @@
 #include "hivemind.h"
 
+#include <memory>
 #include <utility>
 #include "iostream"
 #include "logic_controller.hpp"
-#include "debugging.hpp"
 
 namespace hivemind_lib {
-logic_controller controller;
+std::unique_ptr<LogicController> controller;
 
-int Init() {
-  DEBUG("Init", LEVEL_INFO);
-  controller = logic_controller();
-  return 0;
-}
-
-int AddFunction(std::function<std::string(std::string)> func) {
-  DEBUG("Add Function", LEVEL_INFO);
-  controller.AddFunction(func);
-  return 0;
+void Init() {
+  controller = std::make_unique<LogicController>();
 }
 
 void RegisterBot() {
-  DEBUG("Register Bot", LEVEL_INFO);
-  controller.RegisterBot();
+  if (!controller) {
+    std::cerr << "Call Init first!" << std::endl;
+    return;
+  }
+  controller->RegisterBot();
+  if (controller->HasError()) {
+    std::cerr << "Error in RegisterBot. Did you call InitComms?" << std::endl;
+  }
 }
 
 void BeginComms() {
-  DEBUG("Begin Communications", LEVEL_INFO);
-  controller.BeginComms();
+  if (!controller) {
+    std::cerr << "Call Init first!" << std::endl;
+    return;
+  }
+  controller->BeginComms();
+  if (controller->HasError()) {
+    std::cerr << "Error in BeginComms. Did you call RegisterBot?" << std::endl;
+  }
 }
 
-int UseTCP() {
-  DEBUG("USING TCP", LEVEL_INFO);
-  controller.SetTransportMethod(TCP);
-  return 0;
+void UseTcp() {
+  if (!controller) {
+    std::cerr << "Call Init first!" << std::endl;
+    return;
+  }
+  controller->SetTransportMethod(TCP);
 }
 
-int UseUDP() {
-  DEBUG("USING UDP", LEVEL_INFO);
-  controller.SetTransportMethod(UDP);
-  return 0;
+void UseUdp() {
+  if (!controller) {
+    std::cerr << "Call Init first!" << std::endl;
+    return;
+  }
+  controller->SetTransportMethod(UDP);
 }
 
-int UseICMP() {
-  DEBUG("USING ICMP", LEVEL_INFO);
-  controller.SetTransportMethod(ICMP);
-  return 0;
+void UseIcmp() {
+  if (!controller) {
+    std::cerr << "Call Init first!" << std::endl;
+    return;
+  }
+  controller->SetTransportMethod(ICMP);
 }
 
-int InitComms(std::string hostname, std::string port) {
-  DEBUG("INIT Communications", LEVEL_INFO);
-  controller.InitComms(std::move(hostname), std::move(port));
-  return 0;
+void InitComms(std::string hostname, std::string port) {
+  if (!controller) {
+    std::cerr << "Call Init first!" << std::endl;
+    return;
+  }
+  controller->InitComms(std::move(hostname), std::move(port));
+  if (controller->HasError()) {
+    std::cerr << "Make sure to set transport type before calling InitComms" << std::endl;
+  }
 }
 
 void AddModule(ModuleEnum mod) {
-  DEBUG("Add Module: " << mod, LEVEL_INFO);
-  controller.AddModule(mod);
+  if (!controller) {
+    std::cerr << "Call Init first!" << std::endl;
+    return;
+  }
+  controller->AddModule(mod);
 }
 }
 

@@ -1,5 +1,5 @@
-#ifndef LINUX_H
-#define LINUX_H
+#ifndef HIVEMIND_IMPLANTFRAMEWORK_LIB_PLATFORM_LINUX_HPP_
+#define HIVEMIND_IMPLANTFRAMEWORK_LIB_PLATFORM_LINUX_HPP_
 
 #include <utility>
 
@@ -11,65 +11,65 @@ namespace hivemind_lib {
 /**
  * @brief LINUX implementation of the ICMP transport.
  */
-class LINUX_Icmp_Transport : public hivemind_lib::Transport {
+class LinuxIcmpTransport : public hivemind_lib::Transport {
  public:
   std::string SendAndReceive(std::string data) override;
   void Send(std::string data) override;
   std::string Receive() override;
-  LINUX_Icmp_Transport(std::string hostname, std::string port);
-  ~LINUX_Icmp_Transport();
+  LinuxIcmpTransport(std::string hostname, std::string port);
+  ~LinuxIcmpTransport();
 };
 /**
  * @brief LINUX implementation of the TCP transport.
  */
-class LINUX_Tcp_Transport : public hivemind_lib::Transport {
+class LinuxTcpTransport : public hivemind_lib::Transport {
  public:
   std::string SendAndReceive(std::string data) override;
   void Send(std::string data) override;
   std::string Receive() override;
-  LINUX_Tcp_Transport(std::string hostname, std::string port);
-  ~LINUX_Tcp_Transport();
+  LinuxTcpTransport(std::string hostname, std::string port);
+  ~LinuxTcpTransport();
  private:
 
 };
 /**
  * @brief LINUX implementation of the UDP transport.
  */
-class LINUX_Udp_Transport : public hivemind_lib::Transport {
+class LinuxUdpTransport : public hivemind_lib::Transport {
  public:
   std::string SendAndReceive(std::string data) override;
   void Send(std::string data) override;
   std::string Receive() override;
-  LINUX_Udp_Transport(std::string hostname, std::string port);
-  ~LINUX_Udp_Transport();
+  LinuxUdpTransport(std::string hostname, std::string port);
+  ~LinuxUdpTransport();
 };
 
 /**
  * @brief LINUX Implementation of the PING module.
  */
-class LINUX_Ping_Module : public Module {
+class LinuxPingModule : public Module {
  public:
-  ModuleInfo init() override;
-  std::string ping(std::string host);
-  LINUX_Ping_Module();
+  ModuleInfo Init() override;
+  std::string Ping(std::string host);
+  LinuxPingModule();
 };
 
 /**
  * @brief Typedef to help with cross platform
  */
-typedef LINUX_Tcp_Transport Tcp_Transport;
+typedef LinuxTcpTransport TcpTransport;
 /**
  * @brief Typedef to help with cross platform
  */
-typedef LINUX_Icmp_Transport Icmp_Transport;
+typedef LinuxIcmpTransport IcmpTransport;
 /**
  * @brief Typedef to help with cross platform
  */
-typedef LINUX_Udp_Transport Udp_Transport;
+typedef LinuxUdpTransport UdpTransport;
 /**
  * @brief Typedef to help with cross platform
  */
-typedef LINUX_Ping_Module Ping_Module;
+typedef LinuxPingModule PingModule;
 
 }
 #endif

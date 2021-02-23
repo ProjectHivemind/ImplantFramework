@@ -2,8 +2,8 @@
  * @brief Defines the abstract class for transports
  * @author Im_Adriano
  */
-#ifndef TRANSPORT_H
-#define TRANSPORT_H
+#ifndef HIVEMIND_IMPLANTFRAMEWORK_LIB_INCLUDE_TRANSPORT_HPP_
+#define HIVEMIND_IMPLANTFRAMEWORK_LIB_INCLUDE_TRANSPORT_HPP_
 
 #include <string>
 #include <utility>
@@ -38,28 +38,28 @@ class Transport {
   */
   virtual std::string Receive() = 0;
 
-  Transport(std::string _hostname, std::string _port) {
-    this->hostname = std::move(_hostname);
-    this->port = std::move(_port);
+  Transport(std::string hostname, std::string port) {
+    this->hostname_ = std::move(hostname);
+    this->port_ = std::move(port);
   }
 
  private:
   /**
    * @brief Hostname to connect to for C&C
    */
-  std::string hostname;
+  std::string hostname_;
 
   /**
    * @brief Port, if needed, to connect to for C&C
    */
-  std::string port;
+  std::string port_;
 };
 
 /**
  * @brief Enum for available transports
  */
-enum Transport_Enum {
-  None,
+enum TransportEnum {
+  NONE,
   TCP,
   UDP,
   ICMP

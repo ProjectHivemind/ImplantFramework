@@ -13,82 +13,77 @@
 #include "debugging.hpp"
 #include "module.hpp"
 
-#define DEFAULT_BUFLEN 512
-
 namespace hivemind_lib {
 /**
  * @brief WINDOWS implementation of the ICMP transport.
  */
-class WINDOWS_Icmp_Transport : public Transport {
+class WindowsIcmpTransport : public Transport {
  public:
   std::string SendAndReceive(std::string data) override;
   void Send(std::string data) override;
   std::string Receive() override;
-  WINDOWS_Icmp_Transport(std::string hostname, std::string port);
-  ~WINDOWS_Icmp_Transport();
+  WindowsIcmpTransport(std::string hostname, std::string port);
+  ~WindowsIcmpTransport();
 };
+
 /**
  * @brief WINDOWS implementation of the TCP transport.
  */
-class WINDOWS_Tcp_Transport : public Transport {
+class WindowsTcpTransport : public Transport {
  public:
   std::string SendAndReceive(std::string data) override;
   void Send(std::string data) override;
   std::string Receive() override;
-  WINDOWS_Tcp_Transport(const std::string &hostname, const std::string &port);
-  ~WINDOWS_Tcp_Transport();
+  WindowsTcpTransport(const std::string &hostname, const std::string &port);
+  ~WindowsTcpTransport();
  private:
+  struct addrinfo *result = nullptr;
+
   /**
    * @brief Connect to the given host.
    * @return Status of connecting
    */
-  int ConnectTo();
-
-  WSADATA wsaData{};
-  SOCKET ConnectSocket = INVALID_SOCKET;
-  struct addrinfo *result = nullptr,
-      *ptr = nullptr,
-      hints{};
-  int iResult;
+  SOCKET ConnectTo();
 };
+
 /**
  * @brief WINDOWS implementation of the UDP transport.
  */
-class WINDOWS_Udp_Transport : public Transport {
+class WindowsUdpTransport : public Transport {
  public:
   std::string SendAndReceive(std::string data) override;
   void Send(std::string data) override;
   std::string Receive() override;
-  WINDOWS_Udp_Transport(std::string hostname, std::string port);
-  ~WINDOWS_Udp_Transport();
+  WindowsUdpTransport(std::string hostname, std::string port);
+  ~WindowsUdpTransport();
 };
 
 /**
  * @brief WINDOWS Implementation of the PING module.
  */
-class WINDOWS_Ping_Module : public Module {
+class WindowsPingModule : public Module {
  public:
-  ModuleInfo init() override;
-  std::string ping(std::string host);
-  WINDOWS_Ping_Module();
+  ModuleInfo Init() override;
+  std::string Ping(std::string host);
+  WindowsPingModule();
 };
 
 /**
  * @brief Typedef to help with cross platform
  */
-typedef WINDOWS_Tcp_Transport Tcp_Transport;
+typedef WindowsTcpTransport TcpTransport;
 /**
  * @brief Typedef to help with cross platform
  */
-typedef WINDOWS_Icmp_Transport Icmp_Transport;
+typedef WindowsIcmpTransport IcmpTransport;
 /**
  * @brief Typedef to help with cross platform
  */
-typedef WINDOWS_Udp_Transport Udp_Transport;
+typedef WindowsUdpTransport UdpTransport;
 /**
  * @brief Typedef to help with cross platform
  */
-typedef WINDOWS_Ping_Module Ping_Module;
+typedef WindowsPingModule PingModule;
 
 }
 #endif

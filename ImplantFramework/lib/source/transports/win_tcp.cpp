@@ -10,93 +10,112 @@
  */
 namespace hivemind_lib {
 
-int WINDOWS_Tcp_Transport::ConnectTo() {
+#define DEFAULT_BUFLEN 9000
+
+SOCKET WindowsTcpTransport::ConnectTo() {
+  auto connect_socket = INVALID_SOCKET;
+  int i_result;
+  addrinfo *ptr;
   // Attempt to connect to an address until one succeeds
   for (ptr = result; ptr != nullptr; ptr = ptr->ai_next) {
 
     // Create a SOCKET for connecting to server
-    ConnectSocket = socket(ptr->ai_family, ptr->ai_socktype,
-                           ptr->ai_protocol);
-    if (ConnectSocket == INVALID_SOCKET) {
+    connect_socket = socket(ptr->ai_family, ptr->ai_socktype,
+                            ptr->ai_protocol);
+    if (connect_socket == INVALID_SOCKET) {
       DEBUG("socket failed with error: " << WSAGetLastError(), LEVEL_ERROR);
       WSACleanup();
-      return 1;
+      return INVALID_SOCKET;
     }
 
     // Connect to server.
-    iResult = connect(ConnectSocket, ptr->ai_addr, (int) ptr->ai_addrlen);
-    if (iResult == SOCKET_ERROR) {
-      closesocket(ConnectSocket);
-      ConnectSocket = INVALID_SOCKET;
+    i_result = connect(connect_socket, ptr->ai_addr, (int) ptr->ai_addrlen);
+    if (i_result == SOCKET_ERROR) {
+      closesocket(connect_socket);
+      connect_socket = INVALID_SOCKET;
       continue;
     }
     break;
   }
 
-  if (ConnectSocket == INVALID_SOCKET) {
+  if (connect_socket == INVALID_SOCKET) {
     DEBUG("Unable to connect to server!", LEVEL_ERROR);
     WSACleanup();
-    return 1;
+    return INVALID_SOCKET;
   }
 
-  return 0;
+  return connect_socket;
 }
 
-std::string WINDOWS_Tcp_Transport::SendAndReceive(std::string data) {
-  this->ConnectTo();
+std::string WindowsTcpTransport::SendAndReceive(std::string data) {
+  int i_result;
 
-  iResult = send(ConnectSocket, data.c_str(), (int) strlen(data.c_str()), 0);
-  if (iResult == SOCKET_ERROR) {
+  SOCKET connect_socket = this->ConnectTo();
+  if (connect_socket == INVALID_SOCKET) {
+    DEBUG("ERROR WITH SOCKET", LEVEL_ERROR);
+  }
+
+  i_result = send(connect_socket, data.c_str(), (int) strlen(data.c_str()), 0);
+  if (i_result == SOCKET_ERROR) {
     DEBUG("send failed with error: " << WSAGetLastError(), LEVEL_ERROR);
-    closesocket(ConnectSocket);
+    closesocket(connect_socket);
     WSACleanup();
   }
   // Receive until the peer closes the connection
   char buf[DEFAULT_BUFLEN];
+
   int len = DEFAULT_BUFLEN;
   std::string ret;
   do {
-    iResult = recv(ConnectSocket, buf, len, 0);
-    if (iResult > 0) {
-      DEBUG("Bytes received: " << iResult, LEVEL_INFO);
+    memset(buf, 0, sizeof(buf));
+    i_result = recv(connect_socket, buf, len, 0);
+    if (i_result > 0) {
+      DEBUG("Bytes received: " << i_result, LEVEL_INFO);
       ret += buf;
-    } else if (iResult == 0) {
+    } else if (i_result == 0) {
       DEBUG("Connection closed", LEVEL_INFO);
     } else {
       DEBUG("recv failed with error: " << WSAGetLastError(), LEVEL_ERROR);
     }
-  } while (iResult > 0);
+  } while (i_result > 0);
 
-  // cleanup
-  closesocket(ConnectSocket);
+  closesocket(connect_socket);
   return ret;
 }
 
-void WINDOWS_Tcp_Transport::Send(std::string data) {
-  this->ConnectTo();
+void WindowsTcpTransport::Send(std::string data) {
+  int i_result;
 
-  iResult = send(ConnectSocket, data.c_str(), (int) strlen(data.c_str()), 0);
-  if (iResult == SOCKET_ERROR) {
+  SOCKET connect_socket = this->ConnectTo();
+  if (connect_socket == INVALID_SOCKET) {
+    DEBUG("ERROR WITH SOCKET", LEVEL_ERROR);
+  }
+
+  i_result = send(connect_socket, data.c_str(), (int) strlen(data.c_str()), 0);
+  if (i_result == SOCKET_ERROR) {
     DEBUG("send failed with error: " << WSAGetLastError(), LEVEL_ERROR);
-    closesocket(ConnectSocket);
+    closesocket(connect_socket);
     WSACleanup();
   }
 
-  DEBUG("Bytes Sent: " << iResult, LEVEL_DEBUG);
+  DEBUG("Bytes Sent: " << i_result, LEVEL_DEBUG);
 
-  closesocket(ConnectSocket);
+  closesocket(connect_socket);
 }
 
-std::string WINDOWS_Tcp_Transport::Receive() {
+std::string WindowsTcpTransport::Receive() {
   return "";
 }
 
-WINDOWS_Tcp_Transport::WINDOWS_Tcp_Transport(const std::string &hostname, const std::string &port)
+WindowsTcpTransport::WindowsTcpTransport(const std::string &hostname, const std::string &port)
     : Transport(hostname, port) {
+  WSADATA wsa_data{};
+  struct addrinfo hints{};
+  int i_result;
   // Initialize Winsock
-  iResult = WSAStartup(MAKEWORD(2, 2), &wsaData);
-  if (iResult != 0) {
-    DEBUG("WSAStartup failed with error: " << iResult, LEVEL_ERROR);
+  i_result = WSAStartup(MAKEWORD(2, 2), &wsa_data);
+  if (i_result != 0) {
+    DEBUG("WSAStartup failed with error: " << i_result, LEVEL_ERROR);
     exit(1);
   }
 
@@ -106,14 +125,14 @@ WINDOWS_Tcp_Transport::WINDOWS_Tcp_Transport(const std::string &hostname, const 
   hints.ai_protocol = IPPROTO_TCP;
 
   // Resolve the server address and port
-  iResult = getaddrinfo(hostname.c_str(), port.c_str(), &hints, &result);
-  if (iResult != 0) {
-    DEBUG("getaddrinfo failed with error: " << iResult, LEVEL_ERROR);
+  i_result = getaddrinfo(hostname.c_str(), port.c_str(), &hints, &result);
+  if (i_result != 0) {
+    DEBUG("getaddrinfo failed with error: " << i_result, LEVEL_ERROR);
     WSACleanup();
   }
 }
 
-WINDOWS_Tcp_Transport::~WINDOWS_Tcp_Transport() {
+WindowsTcpTransport::~WindowsTcpTransport() {
   freeaddrinfo(result);
   WSACleanup();
 }

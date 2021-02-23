@@ -9,22 +9,23 @@
  * @brief The Hivemind library
  */
 namespace hivemind_lib {
-std::string WINDOWS_Icmp_Transport::SendAndReceive(std::string data) {
+std::string WindowsIcmpTransport::SendAndReceive(std::string data) {
   return "";
 }
 
-void WINDOWS_Icmp_Transport::Send(std::string data) {
+void WindowsIcmpTransport::Send(std::string data) {
 
 }
 
-std::string WINDOWS_Icmp_Transport::Receive() {
+std::string WindowsIcmpTransport::Receive() {
   return "";
 }
-WINDOWS_Icmp_Transport::WINDOWS_Icmp_Transport(std::string hostname, std::string port)
+
+WindowsIcmpTransport::WindowsIcmpTransport(std::string hostname, std::string port)
     : Transport(std::move(hostname), std::move(port)) {
 
 }
-WINDOWS_Icmp_Transport::~WINDOWS_Icmp_Transport() {
+WindowsIcmpTransport::~WindowsIcmpTransport() {
 
 }
 }

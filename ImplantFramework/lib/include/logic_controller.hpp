@@ -1,5 +1,5 @@
-#ifndef LOGIC_CONTROLLER_H
-#define LOGIC_CONTROLLER_H
+#ifndef HIVEMIND_IMPLANTFRAMEWORK_LIB_INCLUDE_LOGIC_CONTROLLER_HPP_
+#define HIVEMIND_IMPLANTFRAMEWORK_LIB_INCLUDE_LOGIC_CONTROLLER_HPP_
 #include "transport.hpp"
 #include "module.hpp"
 #include "debugging.hpp"
@@ -10,7 +10,9 @@
 #include <map>
 #include <string>
 #include <memory>
-#include <thread>
+#include <boost/thread/thread.hpp>
+#include <boost/thread/mutex.hpp>
+#include <csignal>
 
 #ifdef _WIN32
 #include "windows.hpp"
@@ -29,7 +31,7 @@ struct ThreadInfo {
   /**
    * @brief The handle to the thread.
    */
-  std::thread thread;
+  boost::thread thread;
   /**
    * @brief When the thread was started.
    */
@@ -43,41 +45,95 @@ struct ThreadInfo {
 /**
  * @brief The "main" of the framework, orchestrates the function of the bot.
  */
-class logic_controller {
+class LogicController {
  private:
   /**
    * @brief The method to use for transport
    */
-  Transport_Enum transportMethod;
+  TransportEnum transport_method_;
   /**
    * @brief Modules this bot can run and where they are located
    */
-  std::map<std::string, std::shared_ptr<Module>> modules;
+  std::map<std::string, std::shared_ptr<Module>> modules_;
   /**
    * @brief The transport, used for C&C communications
    */
-  std::unique_ptr<Transport> transport;
+  std::unique_ptr<Transport> transport_;
   /**
    * @brief Contains the info for this implant.
    */
-  ImplantInfo implantInfo;
+  ImplantInfo implant_info_;
   /**
    * @brief A list of info about threads running. To be used by the thread manager.
    */
-  std::vector<ThreadInfo> threadInfos;
+  std::vector<ThreadInfo> thread_infos_;
+
+  /**
+   * @brief Function for the thread handler.
+   * This handler watches all the threads running and terminates them if they have been running for longer than their timeout.
+   * It also joins all threads on completion to clean them up.
+   */
+  void ThreadHandlerFunc();
+
+  /**
+   * @brief Executes the given function in it's own thread.
+   * @param mod String of module to run.
+   * @param func Function in module to run.
+   * @param data Data to send to function, the params for the function.
+   * @param action_id Id of the action, used for responding.
+   */
+  void FuncExecutor(const std::string &mod,
+                    const std::string &func,
+                    const std::string &data,
+                    const std::string &action_id);
+
+  /**
+   * @brief Creates a thread for the function to run in.
+   * @param mod String of module to run.
+   * @param func Function in module to run.
+   * @param data Data to send to function, the params for the function.
+   * @param action_id Id of the action, used for responding.
+   */
+  void CreateFuncExecutor(const std::string &mod,
+                          const std::string &func,
+                          const std::string &data,
+                          const std::string &action_id);
+  /**
+   * @brief Used to store if an error occurs in the logic controller.
+   */
+  bool error_ = false;
+
+  /**
+   * @brief Sets that an error has occured in the controller
+   */
+  void SetError();
+
+  /**
+   * @brief Handler for SIGINT, SIGABRT and SIGTERM
+   */
+  static void SignalHandler(int);
+
+  /**
+   * @brief A flag if the main comm loop should be running.
+   */
+  static bool running_;
+
+  /**
+   * @brief Lock to synchronize access on the thread vector.
+   */
+  static boost::mutex thread_infos_lock_;
 
  public:
   /**
    * @brief Constructor for Logic Controller
    */
-  logic_controller();
+  LogicController();
 
   /**
-   * @brief Add a function to the logic controller that is not in a module
-   * @param func The pointer the function you want to register
-   * TODO maybe remove this.
+   * @brief Returns if an error has occurred
+   * @return bool if the error had occurred
    */
-  void AddFunction(std::function<std::string(std::string)> func);
+  bool HasError() const;
 
   /**
    * @brief Start the registration process
@@ -98,7 +154,7 @@ class logic_controller {
    * @brief Set the transportation method for C&C traffic
    * @param transport_enum The transport method to use
    */
-  void SetTransportMethod(Transport_Enum transport_enum);
+  void SetTransportMethod(TransportEnum transport_enum);
 
   /**
    * @brief Initialize the communication method.

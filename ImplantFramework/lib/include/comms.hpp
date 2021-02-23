@@ -2,8 +2,8 @@
  * @brief Defines the action structs used for communication.
  * @author Im_Adriano
  */
-#ifndef COMMS_H
-#define COMMS_H
+#ifndef HIVEMIND_IMPLANTFRAMEWORK_LIB_INCLUDE_COMMS_HPP_
+#define HIVEMIND_IMPLANTFRAMEWORK_LIB_INCLUDE_COMMS_HPP_
 
 #include <string>
 #include <vector>
@@ -16,23 +16,23 @@
 namespace hivemind_lib {
 
 enum PacketType {
-  ErrorCode = -1,
-  NoAction = 0,
-  ActionRequest = 1,
-  ActionCode = 2,
-  ActionResponseCode = 3,
-  RegistrationRequestCode = 4,
-  RegistrationResponseCode = 5
+  ERROR_CODE = -1,
+  NO_ACTION = 0,
+  ACTION_REQUEST = 1,
+  ACTION_CODE = 2,
+  ACTION_RESPONSE_CODE = 3,
+  REGISTRATION_REQUEST_CODE = 4,
+  REGISTRATION_RESPONSE_CODE = 5
 };
 
 enum ErrorNum {
-  NotRegistered = -1,
-  UnknownModule = -2,
-  UnknownModuleFunction = -3,
-  MissingRequiredData = -4,
-  ModuleTimeout = -5,
-  DuplicateRegistration = -6,
-  UnknownError = -7
+  NOT_REGISTERED = -1,
+  UNKNOWN_MODULE = -2,
+  UNKNOWN_MODULE_FUNCTION = -3,
+  MISSING_REQUIRED_DATA = -4,
+  MODULE_TIMEOUT = -5,
+  DUPLICATE_REGISTRATION = -6,
+  UNKNOWN_ERROR = -7
 };
 
 struct ImplantInfo {
@@ -41,14 +41,14 @@ struct ImplantInfo {
 };
 
 struct Action {
-  int actionId;
+  std::string actionId;
   std::string module;
   std::string moduleFunc;
-  std::vector<std::string> arguments;
+  std::string arguments;
 };
 
 struct ActionResponse {
-  int actionId;
+  std::string actionId;
   std::string response;
 };
 

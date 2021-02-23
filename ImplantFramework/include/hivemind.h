@@ -1,35 +1,29 @@
-﻿#ifndef HIVEMIND_H
-#define HIVEMIND_H
+﻿#ifndef HIVEMIND_IMPLANTFRAMEWORK_INCLUDE_HIVEMIND_H_
+#define HIVEMIND_IMPLANTFRAMEWORK_INCLUDE_HIVEMIND_H_
 #include <string>
 
 namespace hivemind_lib {
 /**
  * @brief Enum for available modules
  */
-enum ModuleEnum{
-  All,
-  Ping,
-  CommandLine
+enum ModuleEnum {
+  ALL,
+  PING,
+  COMMAND_LINE
 };
 
 /**
  * @brief Initialize the library.
  * @return Status.
  */
-int Init();
-/**
- * @brief Add function not found in a module to the library.
- * Stretch Goal TODO
- * @return Status.
- */
-int AddFunction(void *);
-//Register bot
+void Init();
+
 /**
  * @brief Register the bot with the C&C server.
  * @param info The information needed to connect to the C&C.
  */
 void RegisterBot();
-//Start comms
+
 /**
  * @brief Start the loop calling to the C&C.
  */
@@ -43,24 +37,24 @@ void AddModule(ModuleEnum mod);
  * @brief Use the TCP transport.
  * @return Status.
  */
-int UseTCP();
+void UseTcp();
 /**
  * @brief Use the UDP transport
  * @return Status.
  */
-int UseUDP();
+void UseUdp();
 /**
  * @brief User the ICMP transport.
  * @return Status.
  */
-int UseICMP();
+void UseIcmp();
 /**
  * @brief Initialize the communication method.
  * @param hostname The host to call back to.
  * @param port The port to call back to.
  * @return Status.
  */
-int InitComms(std::string hostname, std::string port);
+void InitComms(std::string hostname, std::string port);
 
 }
 #endif

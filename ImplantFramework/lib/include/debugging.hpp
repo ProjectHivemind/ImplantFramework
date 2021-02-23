@@ -1,5 +1,5 @@
-#ifndef DEBUGGING_H
-#define DEBUGGING_H
+#ifndef HIVEMIND_IMPLANTFRAMEWORK_LIB_INCLUDE_DEBUGGING_HPP_
+#define HIVEMIND_IMPLANTFRAMEWORK_LIB_INCLUDE_DEBUGGING_HPP_
 #include <iostream>
 #include <iomanip>
 
@@ -21,7 +21,7 @@
 // ^^^^^^^^^^^^^^^^^^^^^^
 
 #if DEBUGGING
-#define PRINT_STATEMENT(level, index, m, loc) loc << std::left << std::setw(10) << __TIME__ << std::setw(7) << level \
+#define PRINT_STATEMENT(level, index, m, loc) loc << std::left << std::setw(10) << __TIME__ << std::setw(7) << (level) \
                                           << std::setw(40) << file.substr(index) + ":" + __func__ + ": "  \
                                           << m << std::endl;  \
 
@@ -42,10 +42,10 @@
           PRINT_STATEMENT("INFO:", index, x, std::cout)     \
           break;                                            \
         case LEVEL_WARN:                                    \
-          PRINT_STATEMENT("WARN:", index, x, std::cout)     \
+          PRINT_STATEMENT("WARN:", index, x, std::cerr)     \
           break;                                            \
         case LEVEL_ERROR:                                   \
-          PRINT_STATEMENT("ERROR:", index, x, std::cout)    \
+          PRINT_STATEMENT("ERROR:", index, x, std::cerr)    \
           break;                                            \
         case LEVEL_DEBUG:                                   \
           PRINT_STATEMENT("DEBUG:", index, x, std::cout)    \

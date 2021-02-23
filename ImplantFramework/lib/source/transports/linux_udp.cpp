@@ -9,22 +9,23 @@
  * @brief The Hivemind library
  */
 namespace hivemind_lib {
-std::string LINUX_Udp_Transport::SendAndReceive(std::string data) {
+std::string LinuxUdpTransport::SendAndReceive(std::string data) {
   return "";
 }
 
-void LINUX_Udp_Transport::Send(std::string data) {
+void LinuxUdpTransport::Send(std::string data) {
 
 }
 
-std::string LINUX_Udp_Transport::Receive() {
+std::string LinuxUdpTransport::Receive() {
   return "";
 }
-LINUX_Udp_Transport::LINUX_Udp_Transport(std::string hostname, std::string port)
+
+LinuxUdpTransport::LinuxUdpTransport(std::string hostname, std::string port)
     : Transport(std::move(hostname), std::move(port)) {
 
 }
-LINUX_Udp_Transport::~LINUX_Udp_Transport() {
+LinuxUdpTransport::~LinuxUdpTransport() {
 
 }
 }

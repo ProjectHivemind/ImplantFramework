@@ -1,11 +1,18 @@
 add_subdirectory(./external/json)
 
-include_directories(${PROJECT_SOURCE_DIR}/ImplantFramework/include ${PROJECT_SOURCE_DIR}/ImplantFramework/lib/include ${PROJECT_SOURCE_DIR}/ImplantFramework/lib/platform ${PROJECT_SOURCE_DIR}/ImplantFramework/lib/external/json/include/nlohmann)
+set(BOOSTROOT C:\\boost_1_75_0\\boost_1_75_0)
+set(Boost_USE_STATIC_LIBS ON)
+set(Boost_USE_MULTITHREADED ON)
+set(Boost_USE_STATIC_RUNTIME OFF)
+
+FIND_PACKAGE( Boost REQUIRED COMPONENTS thread )
+
+include_directories(${PROJECT_SOURCE_DIR}/ImplantFramework/include ${PROJECT_SOURCE_DIR}/ImplantFramework/lib/include ${PROJECT_SOURCE_DIR}/ImplantFramework/lib/platform ${PROJECT_SOURCE_DIR}/ImplantFramework/lib/external/json/include/nlohmann ${Boost_INCLUDE_DIR})
 
 file(GLOB_RECURSE source_list "*.cpp" "*.hpp")
 
 add_library(Hivemind_lib ${source_list})
 
 if (MSVC)
-    target_link_libraries(Hivemind_lib nlohmann_json::nlohmann_json ws2_32 mswsock advapi32 iphlpapi)
+    target_link_libraries(Hivemind_lib nlohmann_json::nlohmann_json ${Boost_LIBRARIES} ws2_32 mswsock advapi32 iphlpapi)
 endif (MSVC)
