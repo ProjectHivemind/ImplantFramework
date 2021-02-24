@@ -1,4 +1,3 @@
-#include <iostream>
 #include "hivemind.h"
 
 int main() {
