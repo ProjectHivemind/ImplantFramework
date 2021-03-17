@@ -33,47 +33,31 @@ void BeginComms() {
   }
 }
 
-void UseTcp() {
+void InitComms(const std::string& hostname, const std::string &port) {
   if (!controller) {
     std::cerr << "Call Init first!" << std::endl;
     return;
   }
-  controller->SetTransportMethod(TCP);
-}
-
-void UseUdp() {
-  if (!controller) {
-    std::cerr << "Call Init first!" << std::endl;
-    return;
-  }
-  controller->SetTransportMethod(UDP);
-}
-
-void UseIcmp() {
-  if (!controller) {
-    std::cerr << "Call Init first!" << std::endl;
-    return;
-  }
-  controller->SetTransportMethod(ICMP);
-}
-
-void InitComms(std::string hostname, std::string port) {
-  if (!controller) {
-    std::cerr << "Call Init first!" << std::endl;
-    return;
-  }
-  controller->InitComms(std::move(hostname), std::move(port));
+  controller->InitComms(hostname, port);
   if (controller->HasError()) {
-    std::cerr << "Make sure to set transport type before calling InitComms" << std::endl;
+    std::cerr << "Make sure to add a transport type before calling InitComms" << std::endl;
   }
 }
 
-void AddModule(ModuleEnum mod) {
+void AddModule(const std::string& mod) {
   if (!controller) {
     std::cerr << "Call Init first!" << std::endl;
     return;
   }
   controller->AddModule(mod);
+}
+
+void AddTransport(const std::string& transport) {
+  if (!controller) {
+    std::cerr << "Call Init first!" << std::endl;
+    return;
+  }
+  controller->SetTransportMethod(transport);
 }
 }
 
