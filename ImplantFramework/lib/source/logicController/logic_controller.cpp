@@ -158,7 +158,6 @@ void LogicController::CreateFuncExecutor(const std::string &mod,
   thread_infos_lock_.unlock();
 }
 
-//TODO Implement this.
 void LogicController::BeginComms() {
   if (this->implant_info_.UUID.empty()) {
     this->SetError();
@@ -259,9 +258,11 @@ void LogicController::InitComms(const std::string &hostname, const std::string &
 bool LogicController::HasError() const {
   return this->error_;
 }
+
 void LogicController::SetError() {
   this->error_ = true;
 }
+
 void LogicController::SignalHandler(int) {
   LogicController::running_ = false;
   DEBUG("Shutting down", LEVEL_INFO);

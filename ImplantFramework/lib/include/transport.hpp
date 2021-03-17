@@ -60,15 +60,6 @@ class Transport {
   std::string port_;
 };
 
-/**
- * @brief Enum for available transports.
- */
-enum TransportEnum {
-  NONE,
-  TCP,
-  UDP,
-  ICMP
-};
 }
 
 #endif // !TRANSPORT_H

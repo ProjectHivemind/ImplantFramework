@@ -21,19 +21,24 @@ class WindowsUdpTransport : public Transport {
   std::string SendAndReceive(std::string data) override {
     return "";
   }
+
   void Send(std::string data) override {
 
   }
+
   std::string Receive() override {
     return "";
   }
+
   WindowsUdpTransport(std::string hostname, std::string port)
       : Transport(std::move(hostname), std::move(port)) {
 
   }
+
   ~WindowsUdpTransport() = default;
 };
 
 REGISTER_TRANSPORT_FACTORY(WindowsUdpTransport, "UDP");
+
 }
 #endif

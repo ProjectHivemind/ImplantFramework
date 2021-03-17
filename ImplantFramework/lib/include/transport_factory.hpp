@@ -1,3 +1,7 @@
+/** @file transport_factory.hpp
+ * @brief Factory to register modules to.
+ * @author Im_Adriano
+ */
 #ifndef HIVEMIND_IMPLANTFRAMEWORK_LIB_INCLUDE_TRANSPORT_FACTORY_HPP_
 #define HIVEMIND_IMPLANTFRAMEWORK_LIB_INCLUDE_TRANSPORT_FACTORY_HPP_
 
@@ -10,7 +14,9 @@
 #include "debugging.hpp"
 
 namespace hivemind_lib {
-// Macro for class registration
+/**
+ * @brief Macro for class registration
+ */
 #define REGISTER_TRANSPORT_FACTORY(derivedClass, name) \
     namespace { auto registry_ ## derivedClass = ConcreteTransportFactory<derivedClass>(name);  }
 
@@ -18,55 +24,68 @@ class TransportFactory {
  private:
   using FactoryMap = std::map<std::string, TransportFactory *>;
 
-  static auto GetRegister() -> FactoryMap & {
+  static FactoryMap &GetRegister() {
     static FactoryMap class_register{};
     return class_register;
   }
+
  public:
-  /** Register factory object of derived class */
-  static
-  auto RegisterFactory(const std::string &name, TransportFactory *factory) -> void {
+  /**
+   * @brief Registers a factory, do not call directly
+   * @param name Name to store factory under
+   * @param factory Factory to store
+   */
+  static void RegisterFactory(const std::string &name, TransportFactory *factory) {
     auto &reg = TransportFactory::GetRegister();
     reg[name] = factory;
   }
-  /** Show all registered classes */
-  static
-  auto ShowClasses() -> void {
+
+  /**
+   * @brief Show all registered classes
+   */
+  static void ShowClasses() {
     DEBUG("Registered classes.", LEVEL_ERROR);
     DEBUG("===================", LEVEL_ERROR);
     for (const auto &pair: TransportFactory::GetRegister())
       DEBUG(" + " << pair.first, LEVEL_ERROR);
   }
-  /** Get all registered classes */
-  static
-  auto GetClasses() -> std::vector<std::string> {
+
+  /**
+   * @brief Get all registered classes
+   */
+  static std::vector<std::string> GetClasses() {
     std::vector<std::string> ret;
-    for (const auto &pair: TransportFactory::GetRegister()){
+    for (const auto &pair: TransportFactory::GetRegister()) {
       ret.push_back(pair.first);
     }
     return ret;
   }
-  /**  Construct derived class returning a raw pointer */
-  static
-  auto MakeRaw(const std::string &name, const std::string &hostname, const std::string &port) -> Transport * {
+
+  /**
+   * @brief Construct derived class returning a raw pointer
+   * @param name Name of module to make
+   * @return A pointer to an instance of the requested object
+   */
+  static Transport *MakeRaw(const std::string &name, const std::string &hostname, const std::string &port) {
     auto it = TransportFactory::GetRegister().find(name);
     if (it != TransportFactory::GetRegister().end())
       return it->second->Construct(hostname, port);
     return nullptr;
   }
 
-  /** Construct derived class returning an unique ptr  */
-  static
-  auto MakeUnique(const std::string &name, const std::string &hostname, const std::string &port) -> std::unique_ptr<Transport> {
+  /**
+   * @brief Construct derived class returning a unique pointer
+   * @param name Name of module to make
+   * @return A unique pointer to an instance of the requested object
+   */
+  static std::unique_ptr<Transport> MakeUnique(const std::string &name, const std::string &hostname, const std::string &port) {
     return std::unique_ptr<Transport>(TransportFactory::MakeRaw(name, hostname, port));
   }
 
   // Destructor
-  virtual
-  ~TransportFactory() = default;
+  virtual ~TransportFactory() = default;
 
-  virtual
-  auto Construct(const std::string &hostname, const std::string &port) const -> Transport * = 0;
+  virtual Transport *Construct(const std::string &hostname, const std::string &port) const = 0;
 };
 
 template<typename DerivedClass>
@@ -77,7 +96,7 @@ class ConcreteTransportFactory : TransportFactory {
     DEBUG("Transport Registered = " << name, LEVEL_INFO);
     TransportFactory::RegisterFactory(name, this);
   }
-  auto Construct(const std::string &hostname, const std::string &port) const -> Transport * override {
+  Transport *Construct(const std::string &hostname, const std::string &port) const override {
     return new DerivedClass(hostname, port);
   }
 };

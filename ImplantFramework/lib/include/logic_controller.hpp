@@ -1,3 +1,7 @@
+/** @file logic_controler.hpp
+ * @brief Declares functions for the logic controller.
+ * @author Im_Adriano
+ */
 #ifndef HIVEMIND_IMPLANTFRAMEWORK_LIB_INCLUDE_LOGIC_CONTROLLER_HPP_
 #define HIVEMIND_IMPLANTFRAMEWORK_LIB_INCLUDE_LOGIC_CONTROLLER_HPP_
 #include "module.hpp"

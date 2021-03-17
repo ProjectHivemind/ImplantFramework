@@ -62,6 +62,7 @@ class WindowsTcpTransport : public Transport {
     closesocket(connect_socket);
     return ret;
   }
+
   void Send(std::string data) override {
     int i_result;
 
@@ -81,9 +82,11 @@ class WindowsTcpTransport : public Transport {
 
     closesocket(connect_socket);
   }
+
   std::string Receive() override {
     return "";
   }
+
   WindowsTcpTransport(const std::string &hostname, const std::string &port)
       : Transport(hostname, port) {
     WSADATA wsa_data{};
@@ -108,10 +111,12 @@ class WindowsTcpTransport : public Transport {
       WSACleanup();
     }
   }
+
   ~WindowsTcpTransport() {
     freeaddrinfo(result);
     WSACleanup();
   }
+
  private:
   struct addrinfo *result = nullptr;
 
@@ -154,6 +159,8 @@ class WindowsTcpTransport : public Transport {
     return connect_socket;
   }
 };
+
 REGISTER_TRANSPORT_FACTORY(WindowsTcpTransport, "TCP");
+
 }
 #endif

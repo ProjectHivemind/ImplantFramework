@@ -1,3 +1,7 @@
+/** @file windows_ping.hpp
+ * @brief Contains implementation for the PING module
+ * @author Im_Adriano
+ */
 #ifndef HIVEMIND_IMPLANTFRAMEWORK_LIB_SOURCE_MODULES_WINDOWS_PING_HPP_
 #define HIVEMIND_IMPLANTFRAMEWORK_LIB_SOURCE_MODULES_WINDOWS_PING_HPP_
 
@@ -104,5 +108,6 @@ class WindowsPingModule : public Module {
 };
 
 REGISTER_MODULE_FACTORY(WindowsPingModule, "PingModule");
+
 }
 #endif

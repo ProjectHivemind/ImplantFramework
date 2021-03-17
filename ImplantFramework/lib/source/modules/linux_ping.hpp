@@ -1,3 +1,9 @@
+/** @file linux_ping.hpp
+ * @brief Contains implementation for the PING module
+ * @author Im_Adriano
+ */
+#ifndef HIVEMIND_IMPLANTFRAMEWORK_LIB_SOURCE_MODULES_LINUX_PING_HPP_
+#define HIVEMIND_IMPLANTFRAMEWORK_LIB_SOURCE_MODULES_LINUX_PING_HPP_
 #include "module.hpp"
 #include "module_factory.hpp"
 
@@ -28,6 +34,7 @@ class LinuxPingModule : public Module {
 
     return this->mod_info_;
   }
+
   std::string Ping(std::string host) {
     //TODO Implement this.
     return "";
@@ -39,3 +46,4 @@ class LinuxPingModule : public Module {
 REGISTER_MODULE_FACTORY(LinuxPingModule, "PingModule");
 
 }
+#endif

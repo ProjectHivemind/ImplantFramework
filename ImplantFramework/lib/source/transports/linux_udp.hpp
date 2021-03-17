@@ -37,6 +37,8 @@ class LinuxUdpTransport : public hivemind_lib::Transport {
 
   ~LinuxUdpTransport() = default;
 };
+
 REGISTER_TRANSPORT_FACTORY(LinuxUdpTransport, "UDP");
+
 }
 #endif

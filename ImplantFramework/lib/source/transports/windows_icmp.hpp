@@ -38,6 +38,8 @@ class WindowsIcmpTransport : public Transport {
 
   ~WindowsIcmpTransport() = default;
 };
+
 REGISTER_TRANSPORT_FACTORY(WindowsIcmpTransport, "ICMP");
+
 }
 #endif

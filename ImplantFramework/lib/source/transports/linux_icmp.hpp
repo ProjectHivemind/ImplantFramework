@@ -36,6 +36,8 @@ class LinuxIcmpTransport : public hivemind_lib::Transport {
 
   ~LinuxIcmpTransport() = default;
 };
+
 REGISTER_TRANSPORT_FACTORY(LinuxIcmpTransport, "ICMP");
+
 }
 #endif

@@ -38,6 +38,8 @@ class LinuxTcpTransport : public hivemind_lib::Transport {
 
   ~LinuxTcpTransport() = default;
 };
+
 REGISTER_TRANSPORT_FACTORY(LinuxTcpTransport, "TCP");
+
 }
 #endif

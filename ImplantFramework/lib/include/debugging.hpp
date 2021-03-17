@@ -1,5 +1,10 @@
+/** @file debugging.hpp
+ * @brief Defines a toggleable print macro
+ * @author Im_Adriano
+ */
 #ifndef HIVEMIND_IMPLANTFRAMEWORK_LIB_INCLUDE_DEBUGGING_HPP_
 #define HIVEMIND_IMPLANTFRAMEWORK_LIB_INCLUDE_DEBUGGING_HPP_
+
 #include <iostream>
 #include <iomanip>
 #include <boost/thread/mutex.hpp>
@@ -15,16 +20,17 @@
  */
 static boost::mutex print_mutex;
 
-// ONLY EDIT THESE VALUES
+
 /**
  * @brief Mask for what level of debug statements to print.
+ * YOU CAN EDIT THIS VALUE
  */
 #define DEBUG_MASK LEVEL_ALL
 /**
  * @brief Disable or enable debugging all together.
+ * YOU CAN EDIT THIS VALUE
  */
 #define DEBUGGING true
-// ^^^^^^^^^^^^^^^^^^^^^^
 
 #if DEBUGGING
 #define PRINT_STATEMENT(level, index, m, loc) loc << std::left << std::setw(10) << __TIME__ << std::setw(7) << (level) \
