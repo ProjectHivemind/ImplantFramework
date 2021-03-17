@@ -32,22 +32,6 @@ void AddModule(const std::string& mod);
  */
 void AddTransport(const std::string& transport);
 
-///**
-// * @brief Use the TCP transport.
-// * @return Status.
-// */
-//void UseTcp();
-///**
-// * @brief Use the UDP transport
-// * @return Status.
-// */
-//void UseUdp();
-///**
-// * @brief User the ICMP transport.
-// * @return Status.
-// */
-//void UseIcmp();
-
 /**
  * @brief Initialize the communication method.
  * @param hostname The host to call back to.
