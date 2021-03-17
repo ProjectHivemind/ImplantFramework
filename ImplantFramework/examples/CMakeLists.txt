@@ -1,0 +1,7 @@
+include_directories(${PROJECT_SOURCE_DIR}/ImplantFramework/include)
+if (MSVC)
+    add_executable(Hivemind windows/main.cpp)
+elseif (UNIX)
+    add_executable(Hivemind linux/main.cpp)
+endif ()
+target_link_libraries(Hivemind Hivemind_lib)

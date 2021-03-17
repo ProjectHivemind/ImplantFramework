@@ -2,10 +2,11 @@
  * @brief Defines the abstract class for transports
  * @author Im_Adriano
  */
-#ifndef TRANSPORT_H
-#define TRANSPORT_H
+#ifndef HIVEMIND_IMPLANTFRAMEWORK_LIB_INCLUDE_TRANSPORT_HPP_
+#define HIVEMIND_IMPLANTFRAMEWORK_LIB_INCLUDE_TRANSPORT_HPP_
 
 #include <string>
+#include <utility>
 
 /** @namespace hivemind_lib
  * @brief The Hivemind library
@@ -33,8 +34,40 @@ class Transport {
   /**
    * @brief Receive data from the server.
    * @return Data recieved from the server.
+   * TODO Talk about removing.
   */
   virtual std::string Receive() = 0;
+
+  /**
+   * @brief Constructor.
+   * @param hostname Hostname to connect to.
+   * @param port Port to connect to.
+   */
+  Transport(std::string hostname, std::string port) {
+    this->hostname_ = std::move(hostname);
+    this->port_ = std::move(port);
+  }
+
+ private:
+  /**
+   * @brief Hostname to connect to for C&C.
+   */
+  std::string hostname_;
+
+  /**
+   * @brief Port, if needed, to connect to for C&C.
+   */
+  std::string port_;
+};
+
+/**
+ * @brief Enum for available transports.
+ */
+enum TransportEnum {
+  NONE,
+  TCP,
+  UDP,
+  ICMP
 };
 }
 

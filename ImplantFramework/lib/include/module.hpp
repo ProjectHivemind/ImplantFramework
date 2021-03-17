@@ -2,39 +2,37 @@
  * @brief Defines the abstract class for Modules and it's related structs.
  * @author Im_Adriano
  */
-#ifndef MODULE_H
-#define MODULE_H
+#ifndef HIVEMIND_IMPLANTFRAMEWORK_LIB_INCLUDE_MODULE_HPP_
+#define HIVEMIND_IMPLANTFRAMEWORK_LIB_INCLUDE_MODULE_HPP_
 
 #include <map>
 #include <string>
 #include <vector>
+#include <any>
+#include <typeindex>
+#include <typeinfo>
+
+#include "module_arg_parse.hpp"
+#include "json.hpp"
 
 /** @namespace hivemind_lib
  * @brief The Hivemind library
  */
 namespace hivemind_lib {
 /**
- * @brief Struct used to describe parameters needed for a given function in a module.
-*/
-struct ModuleFuncParamInfo {
-  /// \brief The name of the parameter.
-  std::string paramName;
-  /// \brief The type of the parameter.
-  std::string paramType;
-};
-
-/**
  * @brief Struct used to describe a callable function in this module.
 */
 struct ModuleFuncInfo {
   /// \brief Name of the function.
-  std::string moduleFuncName;
+  std::string module_func_name;
   /// \brief Description of the function.
-  std::string moduleFuncDesc;
+  std::string module_func_desc;
   /// \brief Number of parameters the function takes.
-  int paramNum;
-  /// \brief List of structs containing info about the function parameters.
-  std::vector<ModuleFuncParamInfo> paramInfos;
+  int param_num = 0;
+  /// \brief List of strings containing names for the function parameters.
+  std::vector<std::string> param_names;
+  /// \brief List of strings containing types for the function parameters.
+  std::vector<std::string> param_types;
 };
 
 /**
@@ -42,11 +40,11 @@ struct ModuleFuncInfo {
 */
 struct ModuleInfo {
   /// \brief Name of the module.
-  std::string moduleName;
+  std::string module_name;
   /// \brief Description of the module.
-  std::string moduleDesc;
+  std::string module_desc;
   /// \brief List of structs containing info on the functions contained in the module.
-  std::vector<ModuleFuncInfo> moduleFuncs;
+  std::vector<ModuleFuncInfo> module_funcs;
 };
 
 /**
@@ -55,19 +53,34 @@ struct ModuleInfo {
 class Module {
  public:
   /// \brief A map of function name to it's memory location. Used to help with abstraction.
-  std::map<std::string, void *> funcMap;
+  std::map<std::string, std::function<std::string(std::string)>> func_map_;
   /// \brief A map of function names to it's respective timeout time.
-  std::map<std::string, int> timeoutMap;
+  std::map<std::string, int> timeout_map_;
   /// \brief Struct containing info about the current module.
-  ModuleInfo modInfo;
+  ModuleInfo mod_info_;
 
   /**
    * @brief Fill in the funcMap with function names and pointers to the functions.
    *		  Fill in timeoutMap with function names and values in seconds elapsed for which the function should be terminated.
    * @return modInfo completely filled out.
   */
-  virtual ModuleInfo init() = 0;
+  virtual ModuleInfo Init() = 0;
 };
+
+/**
+ * @brief Generate json parsing functions for struct.
+ */
+NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(ModuleFuncInfo,
+                                   module_func_name,
+                                   module_func_desc,
+                                   param_num,
+                                   param_names,
+                                   param_types);
+/**
+ * @brief Generate json parsing functions for struct.
+ */
+NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(ModuleInfo, module_name, module_desc, module_funcs);
+
 }
 
 #endif
