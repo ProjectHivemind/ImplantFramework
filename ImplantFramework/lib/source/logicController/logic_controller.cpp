@@ -290,10 +290,6 @@ void LogicController::AddTransportMethod(const std::string &transport,
   this->transports_.push_back(std::move(temp));
 }
 
-//void LogicController::InitComms(const std::string &hostname, const std::string &port) {
-//
-//}
-
 bool LogicController::HasError() const {
   return this->error_;
 }
