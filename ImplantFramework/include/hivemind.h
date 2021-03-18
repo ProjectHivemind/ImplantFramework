@@ -23,6 +23,7 @@ void BeginComms();
 /**
  * @brief Add a module to the bot.
  * @param mod Module to add.
+ * TODO add a way for developers to add their own modules by passing a whole Module Object.
  */
 void AddModule(const std::string& mod);
 
