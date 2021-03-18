@@ -1,11 +1,13 @@
 #include "logic_controller.hpp"
 
+#include <utility>
+
 namespace hivemind_lib {
 bool LogicController::running_ = true;
 boost::mutex LogicController::thread_infos_lock_;
 
 LogicController::LogicController() {
-  this->transport_method_ = NONE;
+  this->transport_method_ = "NONE";
   signal(SIGINT, LogicController::SignalHandler);
   signal(SIGABRT, LogicController::SignalHandler);
   signal(SIGTERM, LogicController::SignalHandler);
@@ -127,6 +129,7 @@ void LogicController::FuncExecutor(const std::string &mod,
   struct Packet packet;
 
   action_response.actionId = action_id;
+  //TODO try catch
   action_response.response = this->modules_[mod]->func_map_[func](data);
 
   nlohmann::json r = nlohmann::json(action_response);
@@ -155,7 +158,6 @@ void LogicController::CreateFuncExecutor(const std::string &mod,
   thread_infos_lock_.unlock();
 }
 
-//TODO Implement this.
 void LogicController::BeginComms() {
   if (this->implant_info_.UUID.empty()) {
     this->SetError();
@@ -212,54 +214,55 @@ void LogicController::BeginComms() {
   thread_handler.join();
 }
 
-void LogicController::AddModule(ModuleEnum mod) {
-  // TODO revamp this
-  switch (mod) {
-    case ALL: {
-      DEBUG("Adding All Modules", LEVEL_DEBUG);
+void LogicController::AddModule(const std::string& module) {
+  if(module == "ALL"){
+    for(const auto& c: ModuleFactory::GetClasses()){
+      std::shared_ptr<Module> temp = ModuleFactory::MakeUnique(c);
+      this->modules_.insert({temp->mod_info_.module_name, std::move(temp)});
     }
-    case PING: {
-      DEBUG("Adding Ping Module", LEVEL_DEBUG);
-      std::unique_ptr<Module> ping = std::make_unique<PingModule>();
-      auto info = ping->Init();
-      this->modules_.insert({ping->mod_info_.module_name, std::move(ping)});
-      if (mod != ALL) break;
-    }
-    case COMMAND_LINE: {
-      DEBUG("Adding Command Line Module", LEVEL_DEBUG);
-      break;
-    }
-    default: {
+  }else{
+    std::shared_ptr<Module> temp = ModuleFactory::MakeUnique(module);
+    if(!temp){
       DEBUG("UNKNOWN MODULE", LEVEL_ERROR);
-    }
-  }
-}
-
-void LogicController::SetTransportMethod(TransportEnum transport_enum) {
-  this->transport_method_ = transport_enum;
-}
-
-void LogicController::InitComms(std::string hostname, std::string port) {
-  // TODO Revamp this
-  switch (this->transport_method_) {
-    case TCP:this->transport_ = std::make_unique<TcpTransport>(std::move(hostname), std::move(port));
-      break;
-    case UDP:this->transport_ = std::make_unique<UdpTransport>(std::move(hostname), std::move(port));
-      break;
-    case ICMP:this->transport_ = std::make_unique<IcmpTransport>(std::move(hostname), std::move(port));
-      break;
-    case NONE:DEBUG("No transport method chosen", LEVEL_ERROR);
       this->SetError();
-      break;
+      ModuleFactory::ShowClasses();
+      return;
+    }
+    DEBUG("Adding " << temp->mod_info_.module_name << " Module", LEVEL_DEBUG);
+    this->modules_.insert({temp->mod_info_.module_name, std::move(temp)});
   }
+}
+
+void LogicController::SetTransportMethod(const std::string& transport) {
+  auto all_transports = TransportFactory::GetClasses();
+  if(std::find(all_transports.begin(), all_transports.end(), transport) == all_transports.end()){
+    DEBUG("UNKNOWN TRANSPORT", LEVEL_ERROR);
+    this->SetError();
+    TransportFactory::ShowClasses();
+    return;
+  }
+  this->transport_method_ = transport;
+}
+
+void LogicController::InitComms(const std::string &hostname, const std::string &port) {
+  std::shared_ptr<Transport> temp = TransportFactory::MakeUnique(this->transport_method_, hostname, port);
+  if(!temp){
+    DEBUG("ERROR MAKING TRANSPORT", LEVEL_ERROR);
+    this->SetError();
+    return;
+  }
+  DEBUG("Adding " << this->transport_method_ << " Transport", LEVEL_DEBUG);
+  this->transport_ = std::move(temp);
 }
 
 bool LogicController::HasError() const {
   return this->error_;
 }
+
 void LogicController::SetError() {
   this->error_ = true;
 }
+
 void LogicController::SignalHandler(int) {
   LogicController::running_ = false;
   DEBUG("Shutting down", LEVEL_INFO);

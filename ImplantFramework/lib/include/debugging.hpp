@@ -1,7 +1,13 @@
+/** @file debugging.hpp
+ * @brief Defines a toggleable print macro
+ * @author Im_Adriano
+ */
 #ifndef HIVEMIND_IMPLANTFRAMEWORK_LIB_INCLUDE_DEBUGGING_HPP_
 #define HIVEMIND_IMPLANTFRAMEWORK_LIB_INCLUDE_DEBUGGING_HPP_
+
 #include <iostream>
 #include <iomanip>
+#include <boost/thread/mutex.hpp>
 
 #define LEVEL_INFO 0x01
 #define LEVEL_WARN 0x02
@@ -9,16 +15,22 @@
 #define LEVEL_DEBUG 0x08
 #define LEVEL_ALL 0xFF
 
-// ONLY EDIT THESE VALUES
+/**
+ * @brief Make print statements in time order.
+ */
+static boost::mutex print_mutex;
+
+
 /**
  * @brief Mask for what level of debug statements to print.
+ * YOU CAN EDIT THIS VALUE
  */
 #define DEBUG_MASK LEVEL_ALL
 /**
  * @brief Disable or enable debugging all together.
+ * YOU CAN EDIT THIS VALUE
  */
 #define DEBUGGING true
-// ^^^^^^^^^^^^^^^^^^^^^^
 
 #if DEBUGGING
 #define PRINT_STATEMENT(level, index, m, loc) loc << std::left << std::setw(10) << __TIME__ << std::setw(7) << (level) \
@@ -29,7 +41,8 @@
  * @brief Debug statement, first arg is what to print, and second is the level this statement is at.
  */
 #define DEBUG(x, level) do {                                \
-  if((level) & (DEBUG_MASK)) {                                \
+  print_mutex.lock();                                       \
+  if((level) & (DEBUG_MASK)) {                              \
     std::string file = __FILE__;                            \
     size_t index;                                           \
     for (index = file.size(); index > 0; index--)           \
@@ -52,6 +65,7 @@
           break;                                            \
     }                                                       \
   }                                                         \
+  print_mutex.unlock();                                     \
 } while (0)
 #else
 #define DEBUG(x, l) (0)

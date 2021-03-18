@@ -43,6 +43,7 @@ enum ErrorNum {
 
 /**
  * @brief Stores information on the implant. Including it's primary IP and the UUID given by the teamserver.
+ * TODO Rename these to match google standard
  */
 struct ImplantInfo {
   std::string UUID;
@@ -51,6 +52,7 @@ struct ImplantInfo {
 
 /**
  * @brief Struct used to parse and action received from the teamserver.
+ * TODO Rename these to match google standard
  */
 struct Action {
   std::string actionId;
@@ -61,6 +63,7 @@ struct Action {
 
 /**
  * @brief Struct used to send a response to the teamserver.
+ * TODO Rename these to match google standard
  */
 struct ActionResponse {
   std::string actionId;
@@ -69,6 +72,7 @@ struct ActionResponse {
 
 /**
  * @brief Struct used to parse/create packets received and sent to the teamserver.
+ * TODO Rename these to match google standard
  */
 struct Packet {
   std::string fingerprint;
@@ -80,6 +84,7 @@ struct Packet {
 
 /**
  * @brief Struct to parse error packet from teamserver.
+ * TODO Rename these to match google standard
  */
 struct Error {
   std::string actionId;
@@ -88,6 +93,7 @@ struct Error {
 
 /**
  * @brief Struct to create a registration request to register the bot with the teamserver.
+ * TODO Rename these to match google standard
  */
 struct RegistrationRequest {
   std::string IP;
@@ -102,6 +108,7 @@ struct RegistrationRequest {
 
 /**
  * @brief Used to parse the registration response sent by the teamserver.
+ * TODO Rename these to match google standard
  */
 struct RegistrationResponse {
   std::string UUID;

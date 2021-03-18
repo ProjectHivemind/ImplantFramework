@@ -4,15 +4,6 @@
 
 namespace hivemind_lib {
 /**
- * @brief Enum for available modules
- */
-enum ModuleEnum {
-  ALL,
-  PING,
-  COMMAND_LINE
-};
-
-/**
  * @brief Initialize the library.
  * @return Status.
  */
@@ -30,31 +21,25 @@ void RegisterBot();
 void BeginComms();
 
 /**
- * @brief Unknown.
+ * @brief Add a module to the bot.
+ * @param mod Module to add.
+ * TODO add a way for developers to add their own modules by passing a whole Module Object.
  */
-void AddModule(ModuleEnum mod);
+void AddModule(const std::string& mod);
+
 /**
- * @brief Use the TCP transport.
- * @return Status.
+ * @brief Add a transport to the bot.
+ * @param transport Transport to add.
  */
-void UseTcp();
-/**
- * @brief Use the UDP transport
- * @return Status.
- */
-void UseUdp();
-/**
- * @brief User the ICMP transport.
- * @return Status.
- */
-void UseIcmp();
+void AddTransport(const std::string& transport);
+
 /**
  * @brief Initialize the communication method.
  * @param hostname The host to call back to.
  * @param port The port to call back to.
  * @return Status.
  */
-void InitComms(std::string hostname, std::string port);
+void InitComms(const std::string& hostname, const std::string &port);
 
 }
 #endif
