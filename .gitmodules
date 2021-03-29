@@ -1,3 +1,0 @@
-[submodule "ImplantFramework/lib/external/json"]
-	path = ImplantFramework/lib/external/json
-	url = https://github.com/ArthurSonzogni/nlohmann_json_cmake_fetchcontent.git

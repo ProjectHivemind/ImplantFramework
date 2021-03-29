@@ -1,4 +1,18 @@
-add_subdirectory(./external/json)
+include(FetchContent)
+
+FetchContent_Declare(
+        json
+        GIT_REPOSITORY https://github.com/ArthurSonzogni/nlohmann_json_cmake_fetchcontent.git
+        GIT_TAG        master
+        SOURCE_DIR     "${PROJECT_SOURCE_DIR}/ImplantFramework/lib/external/json"
+)
+
+FetchContent_GetProperties(json)
+if(NOT json_POPULATED)
+    FetchContent_Populate(json)
+    add_subdirectory(./external/json)
+endif()
+
 
 if (MSVC)
     set(BOOSTROOT C:\\boost_1_75_0\\boost_1_75_0)

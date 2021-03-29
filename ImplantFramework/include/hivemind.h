@@ -4,6 +4,16 @@
 
 namespace hivemind_lib {
 /**
+ * @brief The methods the framework can select transports for callbacks
+ * TODO maybe add more?
+ */
+enum TransportSelectionMethod {
+  NONE,
+  ROUND_ROBIN,
+  RANDOM
+};
+
+/**
  * @brief Initialize the library.
  * @return Status.
  */
@@ -30,16 +40,16 @@ void AddModule(const std::string& mod);
 /**
  * @brief Add a transport to the bot.
  * @param transport Transport to add.
- */
-void AddTransport(const std::string& transport);
-
-/**
- * @brief Initialize the communication method.
  * @param hostname The host to call back to.
  * @param port The port to call back to.
- * @return Status.
  */
-void InitComms(const std::string& hostname, const std::string &port);
+void AddTransport(const std::string& transport, const std::string& hostname, const std::string &port);
+
+/**
+ * @brief Set the transport selection method.
+ * @param transport_selection_method The method to use when selecting a transport for callbacks.
+ */
+void SetTransportSelectionMethod(TransportSelectionMethod transport_selection_method);
 
 }
 #endif
