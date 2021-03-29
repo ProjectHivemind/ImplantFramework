@@ -256,6 +256,7 @@ void LogicController::AddModule(const std::string &module) {
   if (module == "ALL") {
     for (const auto &c: ModuleFactory::GetClasses()) {
       std::shared_ptr<Module> temp = ModuleFactory::MakeUnique(c);
+      temp->Init();
       this->modules_.insert({temp->mod_info_.module_name, std::move(temp)});
     }
   } else {
