@@ -94,6 +94,8 @@ std::string Gather_Info::GetHostname() {
 }
 
 std::string Gather_Info::GetMACAddr() {
+  // TODO fix this, there is a heap problem somewhere
+  return "";
   std::string primary_ip = GetPrimaryIP();
   std::string mac_addr;
   CHAR* mac_char = (char*)malloc(20);

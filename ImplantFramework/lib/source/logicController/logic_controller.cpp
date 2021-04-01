@@ -218,6 +218,7 @@ void LogicController::BeginComms() {
     DEBUG(response, LEVEL_DEBUG);
     if (response.length() == 0) {
       DEBUG("No connection to teamserver", LEVEL_ERROR);
+      boost::this_thread::sleep_for(boost::chrono::milliseconds(5000));
       continue;
     }
     try {

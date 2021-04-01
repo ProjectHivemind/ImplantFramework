@@ -13,6 +13,13 @@ struct PingArgParse {
 };
 
 /**
+ * @brief Struct for the ping module, used to parse args sent to functions in that module.
+ */
+struct CmdArgParse {
+  std::string cmd{};
+};
+
+/**
  * @brief Parses json from string to a struct, used in module functions.
  * @tparam structType The struct type to fill out and return.
  * @param data The json to parse.
@@ -28,6 +35,8 @@ structType ParseData(std::string data) {
  * @brief Generate json parsing functions for struct.
  */
 NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(PingArgParse, host);
+
+NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(CmdArgParse, cmd);
 
 }
 

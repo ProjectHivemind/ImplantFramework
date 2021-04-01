@@ -33,6 +33,7 @@ class WindowsTcpTransport : public Transport {
     SOCKET connect_socket = this->ConnectTo();
     if (connect_socket == INVALID_SOCKET) {
       DEBUG("ERROR WITH SOCKET", LEVEL_ERROR);
+      return "";
     }
 
     i_result = send(connect_socket, data.c_str(), (int) strlen(data.c_str()), 0);
@@ -40,7 +41,18 @@ class WindowsTcpTransport : public Transport {
       DEBUG("send failed with error: " << WSAGetLastError(), LEVEL_ERROR);
       closesocket(connect_socket);
       WSACleanup();
+      return "";
     }
+
+    // shutdown the connection since no more data will be sent
+    i_result = shutdown(connect_socket, SD_SEND);
+    if (i_result == SOCKET_ERROR) {
+      printf("shutdown failed with error: %d\n", WSAGetLastError());
+      closesocket(connect_socket);
+      WSACleanup();
+      return "";
+    }
+
     // Receive until the peer closes the connection
     char buf[DEFAULT_BUFLEN];
 
@@ -56,6 +68,7 @@ class WindowsTcpTransport : public Transport {
         DEBUG("Connection closed", LEVEL_INFO);
       } else {
         DEBUG("recv failed with error: " << WSAGetLastError(), LEVEL_ERROR);
+        return "";
       }
     } while (i_result > 0);
 
@@ -109,6 +122,7 @@ class WindowsTcpTransport : public Transport {
     if (i_result != 0) {
       DEBUG("getaddrinfo failed with error: " << i_result, LEVEL_ERROR);
       WSACleanup();
+      exit(1);
     }
   }
 
@@ -125,9 +139,20 @@ class WindowsTcpTransport : public Transport {
    * @return Status of connecting
    */
   SOCKET ConnectTo() {
+
+
     auto connect_socket = INVALID_SOCKET;
     int i_result;
     addrinfo *ptr;
+
+    // Initialize Winsock
+    WSADATA wsa_data{};
+    i_result = WSAStartup(MAKEWORD(2, 2), &wsa_data);
+    if (i_result != 0) {
+      DEBUG("WSAStartup failed with error: " << i_result, LEVEL_ERROR);
+      return INVALID_SOCKET;
+    }
+
     // Attempt to connect to an address until one succeeds
     for (ptr = result; ptr != nullptr; ptr = ptr->ai_next) {
 

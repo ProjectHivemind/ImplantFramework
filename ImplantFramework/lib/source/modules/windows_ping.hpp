@@ -25,7 +25,7 @@ class WindowsPingModule : public Module {
     struct ModuleFuncInfo module_func_info;
 
     module_func_info.param_names.emplace_back("host");
-    module_func_info.param_types.emplace_back("STRING");
+    module_func_info.param_types.emplace_back("String");
     module_func_info.module_func_name = "PING";
     module_func_info.module_func_desc = "Function to Ping host";
     module_func_info.param_num = 1;
