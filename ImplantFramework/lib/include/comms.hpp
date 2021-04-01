@@ -43,119 +43,112 @@ enum ErrorNum {
 
 /**
  * @brief Stores information on the implant. Including it's primary IP and the UUID given by the teamserver.
- * TODO Rename these to match google standard
  */
 struct ImplantInfo {
-  std::string UUID;
-  std::string primaryIP;
+  std::string uuid;
+  std::string primary_ip;
 };
 
 /**
  * @brief Struct used to parse and action received from the teamserver.
- * TODO Rename these to match google standard
  */
 struct Action {
-  std::string actionId;
+  std::string action_id;
   std::string module;
-  std::string moduleFunc;
+  std::string module_func;
   std::string arguments;
 };
 
 /**
  * @brief Struct used to send a response to the teamserver.
- * TODO Rename these to match google standard
  */
 struct ActionResponse {
-  std::string actionId;
+  std::string action_id;
   std::string response;
 };
 
 /**
  * @brief Struct used to parse/create packets received and sent to the teamserver.
- * TODO Rename these to match google standard
  */
 struct Packet {
   std::string fingerprint;
-  ImplantInfo implantInfo;
-  PacketType packetType;
-  int numLeft;
+  ImplantInfo implant_info;
+  PacketType packet_type;
+  int num_left;
   std::string data;
 };
 
 /**
  * @brief Struct to parse error packet from teamserver.
- * TODO Rename these to match google standard
  */
 struct Error {
-  std::string actionId;
-  ErrorNum errorNum;
+  std::string action_id;
+  ErrorNum error_num;
 };
 
 /**
  * @brief Struct to create a registration request to register the bot with the teamserver.
- * TODO Rename these to match google standard
  */
 struct RegistrationRequest {
-  std::string IP;
-  std::string implantName;
-  std::string implantVersion;
+  std::string ip;
+  std::string implant_name;
+  std::string implant_version;
   std::string hostname;
-  std::string MAC;
-  std::vector<std::string> otherIPs;
-  std::string OS;
-  std::vector<ModuleInfo> supportedModules;
+  std::string mac;
+  std::vector<std::string> other_ips;
+  std::string os;
+  std::vector<ModuleInfo> supported_modules;
 };
 
 /**
  * @brief Used to parse the registration response sent by the teamserver.
- * TODO Rename these to match google standard
  */
 struct RegistrationResponse {
-  std::string UUID;
+  std::string uuid;
 };
 
 /**
  * @brief Generate json parsing functions for struct.
  */
-NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(ImplantInfo, UUID, primaryIP);
+NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(ImplantInfo, uuid, primary_ip);
 
 /**
  * @brief Generate json parsing functions for struct.
  */
-NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(ActionResponse, actionId, response);
+NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(ActionResponse, action_id, response);
 
 /**
  * @brief Generate json parsing functions for struct.
  */
-NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(Action, actionId, module, moduleFunc, arguments);
+NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(Action, action_id, module, module_func, arguments);
 
 /**
  * @brief Generate json parsing functions for struct.
  */
-NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(Error, actionId, errorNum);
+NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(Error, action_id, error_num);
 
 /**
  * @brief Generate json parsing functions for struct.
  */
 NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(RegistrationRequest,
-                                   IP,
-                                   implantName,
-                                   implantVersion,
+                                   ip,
+                                   implant_name,
+                                   implant_version,
                                    hostname,
-                                   MAC,
-                                   otherIPs,
-                                   OS,
-                                   supportedModules);
+                                   mac,
+                                   other_ips,
+                                   os,
+                                   supported_modules);
 
 /**
  * @brief Generate json parsing functions for struct.
  */
-NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(Packet, fingerprint, implantInfo, packetType, numLeft, data);
+NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(Packet, fingerprint, implant_info, packet_type, num_left, data);
 
 /**
  * @brief Generate json parsing functions for struct.
  */
-NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(RegistrationResponse, UUID);
+NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(RegistrationResponse, uuid);
 
 }
 

