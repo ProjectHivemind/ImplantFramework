@@ -12,6 +12,7 @@
 #include "hivemind.h"
 #include "module_factory.hpp"
 #include "transport_factory.hpp"
+#include "gather_implant_info.hpp"
 
 #include <map>
 #include <string>
