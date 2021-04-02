@@ -13,4 +13,4 @@ project("Hivemind")
 set(CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake" ${CMAKE_MODULE_PATH})
 
 add_subdirectory("ImplantFramework")
-#add_subdirectory("docs")
+add_subdirectory("docs")
