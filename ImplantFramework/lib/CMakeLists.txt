@@ -20,7 +20,7 @@ endif (MSVC)
 
 set(Boost_USE_STATIC_LIBS ON)
 set(Boost_USE_MULTITHREADED ON)
-set(Boost_USE_STATIC_RUNTIME OFF)
+set(Boost_USE_STATIC_RUNTIME ON)
 
 FIND_PACKAGE(Boost REQUIRED COMPONENTS thread system chrono timer)
 
@@ -60,6 +60,8 @@ include_directories(${PROJECT_SOURCE_DIR}/ImplantFramework/include
 add_library(Hivemind_lib ${source_list})
 
 if (MSVC)
+    set(CMAKE_FIND_LIBRARY_SUFFIXES ".lib")
+    target_link_options(Hivemind_lib PRIVATE /INCREMENTAL:NO /NODEFAULTLIB:MSVCRT)
     target_link_libraries(Hivemind_lib nlohmann_json::nlohmann_json ${Boost_LIBRARIES} ws2_32 mswsock advapi32 iphlpapi)
 endif (MSVC)
 

@@ -1,6 +1,8 @@
 include_directories(${PROJECT_SOURCE_DIR}/ImplantFramework/include)
 if (MSVC)
     add_executable(Hivemind windows/main.cpp)
+    set(CMAKE_FIND_LIBRARY_SUFFIXES ".lib")
+    target_link_options(Hivemind PRIVATE /INCREMENTAL:NO /NODEFAULTLIB:MSVCRT)
 elseif (UNIX)
     add_executable(Hivemind linux/main.cpp)
 endif ()
