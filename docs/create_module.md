@@ -80,15 +80,18 @@ NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(ExampleArgParse, some_string);
 ```
 
 This starter code is a fully implemented example module that has a function called `YourFunction` which returns an empty string.
-To make this your own module start by renaming the `TargetExampleModule` to what ever your target and module name is. 
-Next implement all the functions you want this module to have. These modules can only take in a single string which will be a json string.
+
+1. To make this your own module start by renaming the `TargetExampleModule` to what ever your target and module name is. 
+1. Next implement all the functions you want this module to have. These modules can only take in a single string which will be a json string.
 They must also return a string. To deal with the hassle of parsing json a json library is included in this framework. 
 To pull parameters from the json create a struct like the one in the example code called `ExampleArgParse` and fill it with the things your function takes as an argument. 
 Then using `NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(ExampleArgParse, some_string);` your struct is ready to parse some json. 
 To then parse the string into your struct call `ParseData<ExampleArgParse>(std::move(json))` like in `YourFunction`.
-You can then access members of the struct and use them as you want. The last part required is the `init` function.
+You can then access members of the struct and use them as you want. 
+1. The last part required is the `init` function.
 This is what informs the Teamserver all about this module, what functions it has, the required parameters for each and the types. 
 First fill out a `ModuleFuncInfo` for each function, the valid parameter types are `String`, `Int`, `Double` and `Bool`. 
 Then add these function structs to the `this->mod_info_` struct as well as filling in the rest of the data in the mod_info struct. 
 For each function set up a safe pointer to it following the example in the example code. Then add this to the ` this->func_map_` map.
+
 Your module is now complete! Rerun the cmake/make and your module should be ready to use. 

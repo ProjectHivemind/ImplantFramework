@@ -53,6 +53,9 @@ REGISTER_TRANSPORT_FACTORY(TargetExampleTransport, "EXAMPLE");
 #endif
 ```
 
-First rename all the `Target` and `Example` instances with the target and name of your transport. Next implement the `SendAndReceive`, `Send` and constructor for your transport.
-`SendAndReceive` first sends the given data then listens for a response until a certain condition is met like a connection close for TCP or a sentient value for UDP.
-`Send` sends the given data the returns. Add to the constructor as necessary. Once these are implemented rerun the cmake/make and you have created a transport!
+1. First rename all the `Target` and `Example` instances with the target and name of your transport. 
+1. Next implement the `SendAndReceive`, `Send` and constructor for your transport.
+1. `SendAndReceive` first sends the given data then listens for a response until a certain condition is met like a connection close for TCP or a sentient value for UDP.
+1. `Send` sends the given data the returns. Add to the constructor as necessary. 
+  
+Once these are implemented rerun the cmake/make and you have created a transport!
