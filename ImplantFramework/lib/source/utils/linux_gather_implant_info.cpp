@@ -10,18 +10,17 @@
 
 namespace hivemind_lib {
 
-std::string Gather_Info::GetPrimaryIP() override {
-  return nullptr;
+std::string Gather_Info::GetPrimaryIP() {
+  return "";
 }
-std::string Gather_Info::GetHostname() override {
-  return nullptr;
+std::string Gather_Info::GetHostname() {
+  return "";
 }
-std::string Gather_Info::GetMACAddr() override {
-  return nullptr;
+std::string Gather_Info::GetMACAddr() {
+  return "";
 }
-std::vector<std::string> Gather_Info::GetOtherIPs() override {
-  return nullptr;
+std::vector<std::string> Gather_Info::GetOtherIPs() {
+  return {""};
 }
-
 
 }
