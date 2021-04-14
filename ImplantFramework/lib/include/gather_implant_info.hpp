@@ -6,6 +6,9 @@
 #ifndef HIVEMIND_IMPLANTFRAMEWORK_LIB_INCLUDE_GATHER_IMPLANT_INFO_H_
 #define HIVEMIND_IMPLANTFRAMEWORK_LIB_INCLUDE_GATHER_IMPLANT_INFO_H_
 
+#include <vector>
+#include <string>
+
 namespace hivemind_lib {
 
 class Gather_Info {

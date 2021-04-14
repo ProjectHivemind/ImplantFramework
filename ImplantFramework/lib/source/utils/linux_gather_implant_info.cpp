@@ -19,7 +19,7 @@ std::string Gather_Info::GetHostname() override {
 std::string Gather_Info::GetMACAddr() override {
   return nullptr;
 }
-std::string Gather_Info::GetOtherIPs() override {
+std::vector<std::string> Gather_Info::GetOtherIPs() override {
   return nullptr;
 }
 
