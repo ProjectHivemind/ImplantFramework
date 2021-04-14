@@ -8,18 +8,18 @@
 #include "module_factory.hpp"
 
 namespace hivemind_lib {
+/**
+ * @brief Struct for the ping module, used to parse args sent to functions in that module.
+ */
+struct PingArgParse {
+  std::string host{};
+};
+
 
 /**
  * @brief LINUX Implementation of the PING module.
  */
 class LinuxPingModule : public Module {
-/**
- * @brief Struct for the ping module, used to parse args sent to functions in that module.
- */
-  struct PingArgParse {
-    std::string host{};
-  };
-
  public:
   ModuleInfo Init() override{
     struct ModuleFuncInfo module_func_info;

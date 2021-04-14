@@ -31,7 +31,6 @@ struct ExampleArgParse {
  * @brief An Example module to show people how to make one.
  */
 class TargetExampleModule : public Module {
-
  public:
   ModuleInfo Init() override{
     // Create this struct to describe a function in your module. One for each exported function.
