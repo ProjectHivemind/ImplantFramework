@@ -17,6 +17,13 @@
 
 namespace hivemind_lib {
 /**
+ * @brief Struct for the ping module, used to parse args sent to functions in that module.
+ */
+struct PingArgParse {
+  std::string host{};
+};
+
+/**
  * @brief WINDOWS Implementation of the PING module.
  */
 class WindowsPingModule : public Module {
@@ -108,6 +115,8 @@ class WindowsPingModule : public Module {
 };
 
 REGISTER_MODULE_FACTORY(WindowsPingModule, "PingModule");
+
+NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(PingArgParse, host);
 
 }
 #endif

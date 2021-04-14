@@ -13,6 +13,12 @@ namespace hivemind_lib {
  * @brief LINUX Implementation of the PING module.
  */
 class LinuxPingModule : public Module {
+/**
+ * @brief Struct for the ping module, used to parse args sent to functions in that module.
+ */
+  struct PingArgParse {
+    std::string host{};
+  };
 
  public:
   ModuleInfo Init() override{
@@ -21,6 +27,7 @@ class LinuxPingModule : public Module {
     module_func_info.param_names.emplace_back("Host");
     module_func_info.param_types.emplace_back("STRING");
     module_func_info.module_func_name = "PING";
+    module_func_info.module_func_desc = "Function to Ping host";
     module_func_info.param_num = 1;
 
     this->mod_info_.module_funcs.push_back(module_func_info);
@@ -44,6 +51,8 @@ class LinuxPingModule : public Module {
 };
 
 REGISTER_MODULE_FACTORY(LinuxPingModule, "PingModule");
+
+NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(PingArgParse, host);
 
 }
 #endif

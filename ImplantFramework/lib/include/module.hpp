@@ -12,7 +12,6 @@
 #include <typeindex>
 #include <typeinfo>
 
-#include "module_arg_parse.hpp"
 #include "json.hpp"
 
 /** @namespace hivemind_lib
@@ -66,6 +65,18 @@ class Module {
   */
   virtual ModuleInfo Init() = 0;
 };
+
+/**
+ * @brief Parses json from string to a struct, used in module functions.
+ * @tparam structType The struct type to fill out and return.
+ * @param data The json to parse.
+ * @return The struct filled with data from the parsed json.
+ */
+template<typename structType>
+structType ParseData(std::string data) {
+  nlohmann::json extract = nlohmann::json::parse(data);
+  return extract.get<structType>();
+}
 
 /**
  * @brief Generate json parsing functions for struct.

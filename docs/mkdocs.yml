@@ -5,6 +5,12 @@ edit_uri: ""
 
 nav:
   - Home: index.md
+  - Design: design.md
+  - Developers:
+    - Getting Started: developing.md
+    - Prequisites: prequisites.md
+    - Creating a Module: create_module.md
+    - Creating a Transport: create_transport.md
   - Classes: Classes/index.md
   - Files: Files/index.md
 theme:
@@ -15,3 +21,7 @@ theme:
     scheme: preference
   features:
     - navigation.tabs
+markdown_extensions:
+  - pymdownx.highlight:
+      linenums: true
+  - pymdownx.superfences

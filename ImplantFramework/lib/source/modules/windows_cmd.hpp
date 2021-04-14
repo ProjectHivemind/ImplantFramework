@@ -14,6 +14,13 @@
 
 namespace hivemind_lib {
 /**
+ * @brief Struct for the ping module, used to parse args sent to functions in that module.
+ */
+struct CmdArgParse {
+  std::string cmd{};
+};
+
+/**
  * @brief WINDOWS Implementation of the CMD module.
  */
 class WindowsCmdModule : public Module {
@@ -148,6 +155,8 @@ class WindowsCmdModule : public Module {
 };
 
 REGISTER_MODULE_FACTORY(WindowsCmdModule, "CmdModule");
+
+NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(CmdArgParse, cmd);
 
 }
 
