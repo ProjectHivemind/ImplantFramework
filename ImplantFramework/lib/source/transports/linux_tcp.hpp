@@ -1,8 +1,7 @@
 /** @file linux_tcp.hpp
  * @brief Contains implementation for the TCP transport
- * @author Im_Adriano
+ * @author raydan4
  */
-//TODO Implement this.
 #ifndef HIVEMIND_IMPLANTFRAMEWORK_LIB_SOURCE_TRANSPORTS_LINUX_TCP_HPP_
 #define HIVEMIND_IMPLANTFRAMEWORK_LIB_SOURCE_TRANSPORTS_LINUX_TCP_HPP_
 #include <stdio.h>
@@ -42,6 +41,9 @@ class LinuxTcpTransport : public hivemind_lib::Transport {
     } else {
       DEBUG("Bytes Sent:" << i_result, LEVEL_DEBUG);
     }
+
+    // Shutdown sending
+    shutdown(socket, SHUT_WR);
 
     // Receive data
     char buf[DEFAULT_BUFLEN];
