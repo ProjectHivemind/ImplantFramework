@@ -76,7 +76,7 @@ class LinuxTcpTransport : public hivemind_lib::Transport {
     int socket = this -> ConnectTo();
     if (socket < 0) {
       DEBUG("ERROR WITH SOCKET", LEVEL_ERROR);
-      goto cleanup;
+      return;
     }
 
     // Send data
@@ -128,6 +128,7 @@ class LinuxTcpTransport : public hivemind_lib::Transport {
 
     if (int status = connect(socketfd, (struct sockaddr*)&server_address, sizeof(server_address)) < 0) {
       DEBUG("ERROR CONNECTING TO SERVER", LEVEL_ERROR);
+      close(socketfd);
       return status;
     }
 
