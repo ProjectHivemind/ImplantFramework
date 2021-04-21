@@ -4,4 +4,9 @@
 
 /out/
 /.vs
+/.vscode
 /cmake-build-debug/
+CMakeCache.txt
+CMakeFiles/
+ImplantFramework/lib/external/
+_deps/
