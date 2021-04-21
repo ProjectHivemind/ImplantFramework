@@ -25,8 +25,11 @@ namespace hivemind_lib {
 class LinuxTcpTransport : public hivemind_lib::Transport {
  public:
   std::string SendAndReceive(std::string data) override {
+    std::string ret = "";
+    char buf[DEFAULT_BUFLEN];
+    int len = DEFAULT_BUFLEN;
     int i_result;
-    
+   
     // Create socket
     int socket = this -> ConnectTo();
     if (socket < 0) {
@@ -38,6 +41,7 @@ class LinuxTcpTransport : public hivemind_lib::Transport {
     i_result = write(socket, data.c_str(), strlen(data.c_str()));
     if (i_result < 0) {
       DEBUG("ERROR WRITING TO SOCKET", LEVEL_ERROR);
+      goto cleanup;
     } else {
       DEBUG("Bytes Sent:" << i_result, LEVEL_DEBUG);
     }
@@ -46,9 +50,6 @@ class LinuxTcpTransport : public hivemind_lib::Transport {
     shutdown(socket, SHUT_WR);
 
     // Receive data
-    char buf[DEFAULT_BUFLEN];
-    int len = DEFAULT_BUFLEN;
-    std::string ret;
     do {
       memset(buf, 0, sizeof(buf));
       i_result = read(socket, buf, len);
@@ -59,12 +60,13 @@ class LinuxTcpTransport : public hivemind_lib::Transport {
         DEBUG("Connection closed", LEVEL_INFO);
       } else {
         DEBUG("ERROR READING FROM SOCKET", LEVEL_ERROR);
-        return "";
+        goto cleanup;
       }
     } while (i_result > 0);
 
-    close(socket);
-    return ret;
+    cleanup:
+      close(socket);
+      return ret;
   }
 
   void Send(std::string data) override {
@@ -74,17 +76,20 @@ class LinuxTcpTransport : public hivemind_lib::Transport {
     int socket = this -> ConnectTo();
     if (socket < 0) {
       DEBUG("ERROR WITH SOCKET", LEVEL_ERROR);
+      goto cleanup;
     }
 
     // Send data
     i_result = write(socket, data.c_str(), strlen(data.c_str()));
     if (i_result < 0) {
       DEBUG("ERROR WRITING TO SOCKET", LEVEL_ERROR);
+      goto cleanup;
     } else {
       DEBUG("Bytes Sent: " << i_result, LEVEL_DEBUG);
     }
 
-    close(socket);
+    cleanup:
+      close(socket);
   }
 
   std::string Receive() override {
@@ -99,6 +104,7 @@ class LinuxTcpTransport : public hivemind_lib::Transport {
 
     if (server == NULL) {
       DEBUG("ERROR RESOLVING SERVER ADDRESS", LEVEL_ERROR);
+      exit(1);
     }
 
     memset(&server_address, 0, sizeof(server_address));
