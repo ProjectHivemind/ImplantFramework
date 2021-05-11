@@ -31,11 +31,11 @@ class WindowsCmdModule : public Module {
     module_func_info.param_names.emplace_back("cmd");
     module_func_info.param_types.emplace_back("String");
     module_func_info.module_func_name = "EXEC";
-    module_func_info.module_func_desc = "Function to run cmd.exe command";
+    module_func_info.module_func_desc = "Function to run command in cmd.exe";
     module_func_info.param_num = 1;
 
     this->mod_info_.module_funcs.push_back(module_func_info);
-    this->mod_info_.module_name = "CMD";
+    this->mod_info_.module_name = "WINDOWS CMD";
     this->mod_info_.module_desc = "A module to run cmd commands";
 
     std::function < std::string(std::string) > f = std::bind(&WindowsCmdModule::Exec, this, std::placeholders::_1);
